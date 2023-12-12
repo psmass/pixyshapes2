@@ -3,10 +3,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ShapeType.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ShapeType.idl 
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #ifndef NDDS_STANDALONE_TYPE
@@ -16,7 +17,8 @@ or consult the RTI Connext manual.
 #ifndef dds_c_log_impl_h              
 #include "dds_c/dds_c_log_impl.h"                                
 #endif 
-#ifndef dds_c_log_infrastructure_h                      
+
+#ifndef dds_c_log_infrastructure_h
 #include "dds_c/dds_c_infrastructure_impl.h"       
 #endif 
 
@@ -43,7 +45,7 @@ or consult the RTI Connext manual.
 const char *ShapeFillKindTYPENAME = "ShapeFillKind";
 
 #ifndef NDDS_STANDALONE_TYPE
-DDS_TypeCode* ShapeFillKind_get_typecode()
+DDS_TypeCode * ShapeFillKind_get_typecode(void)
 {
     static RTIBool is_initialized = RTI_FALSE;
 
@@ -151,6 +153,8 @@ DDS_TypeCode* ShapeFillKind_get_typecode()
         return &ShapeFillKind_g_tc;
     }
 
+    is_initialized = RTI_TRUE;
+
     ShapeFillKind_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
     /* Initialize the values for annotations. */
@@ -161,8 +165,6 @@ DDS_TypeCode* ShapeFillKind_get_typecode()
     ShapeFillKind_get_sample_access_info();
     ShapeFillKind_g_tc._data._typePlugin =
     ShapeFillKind_get_type_plugin_info();    
-
-    is_initialized = RTI_TRUE;
 
     return &ShapeFillKind_g_tc;
 }
@@ -211,9 +213,9 @@ RTIXCdrSampleAccessInfo *ShapeFillKind_get_sample_access_info()
     {
         size_t candidateTypeSize = sizeof(ShapeFillKind);
 
-        if (candidateTypeSize > RTIXCdrUnsignedLong_MAX) {
+        if (candidateTypeSize > RTIXCdrLong_MAX) {
             ShapeFillKind_g_sampleAccessInfo.typeSize[0] =
-            RTIXCdrUnsignedLong_MAX;
+            RTIXCdrLong_MAX;
         } else {
             ShapeFillKind_g_sampleAccessInfo.typeSize[0] =
             (RTIXCdrUnsignedLong) candidateTypeSize;
@@ -232,7 +234,6 @@ RTIXCdrSampleAccessInfo *ShapeFillKind_get_sample_access_info()
     is_initialized = RTI_TRUE;
     return (RTIXCdrSampleAccessInfo*) &ShapeFillKind_g_sampleAccessInfo;
 }
-
 RTIXCdrTypePlugin *ShapeFillKind_get_type_plugin_info()
 {
     static RTIXCdrTypePlugin ShapeFillKind_g_typePlugin = 
@@ -252,6 +253,7 @@ RTIXCdrTypePlugin *ShapeFillKind_get_type_plugin_info()
         NULL,
         (RTIXCdrTypePluginFinalizeSampleFunction)
         ShapeFillKind_finalize_w_return,
+        NULL,
         NULL
     };
 
@@ -260,28 +262,15 @@ RTIXCdrTypePlugin *ShapeFillKind_get_type_plugin_info()
 #endif
 
 RTIBool ShapeFillKind_initialize(
-    ShapeFillKind* sample) {
+    ShapeFillKind* sample)
+{
+
     *sample = SOLID_FILL;
     return RTI_TRUE;
 }
-
-RTIBool ShapeFillKind_initialize_ex(
-    ShapeFillKind* sample,RTIBool allocatePointers, RTIBool allocateMemory)
-{
-
-    struct DDS_TypeAllocationParams_t allocParams =
-    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
-
-    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
-    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
-
-    return ShapeFillKind_initialize_w_params(
-        sample,&allocParams);
-
-}
-
 RTIBool ShapeFillKind_initialize_w_params(
-    ShapeFillKind* sample, const struct DDS_TypeAllocationParams_t * allocParams)
+    ShapeFillKind *sample,
+    const struct DDS_TypeAllocationParams_t *allocParams)
 {
 
     if (sample == NULL) {
@@ -292,6 +281,22 @@ RTIBool ShapeFillKind_initialize_w_params(
     }
     *sample = SOLID_FILL;
     return RTI_TRUE;
+}
+RTIBool ShapeFillKind_initialize_ex(
+    ShapeFillKind *sample,
+    RTIBool allocatePointers, 
+    RTIBool allocateMemory)
+{
+
+    struct DDS_TypeAllocationParams_t allocParams =
+    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
+
+    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
+    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
+
+    return ShapeFillKind_initialize_w_params(
+        sample,
+        &allocParams);
 }
 
 RTIBool ShapeFillKind_finalize_w_return(
@@ -304,15 +309,15 @@ RTIBool ShapeFillKind_finalize_w_return(
 
 void ShapeFillKind_finalize(
     ShapeFillKind* sample)
-{
-
+{  
     if (sample==NULL) {
         return;
     }
 }
 
 void ShapeFillKind_finalize_ex(
-    ShapeFillKind* sample,RTIBool deletePointers)
+    ShapeFillKind *sample,
+    RTIBool deletePointers)
 {
     struct DDS_TypeDeallocationParams_t deallocParams =
     DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
@@ -324,13 +329,14 @@ void ShapeFillKind_finalize_ex(
     deallocParams.delete_pointers = (DDS_Boolean)deletePointers;
 
     ShapeFillKind_finalize_w_params(
-        sample,&deallocParams);
+        sample,
+        &deallocParams);
 }
 
 void ShapeFillKind_finalize_w_params(
-    ShapeFillKind* sample,const struct DDS_TypeDeallocationParams_t * deallocParams)
+    ShapeFillKind *sample,
+    const struct DDS_TypeDeallocationParams_t *deallocParams)
 {
-
     if (sample==NULL) {
         return;
     }
@@ -411,11 +417,11 @@ RTIBool ShapeFillKind_copy(
 const char *ShapeTypeTYPENAME = "ShapeType";
 
 #ifndef NDDS_STANDALONE_TYPE
-DDS_TypeCode* ShapeType_get_typecode()
+DDS_TypeCode * ShapeType_get_typecode(void)
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode ShapeType_g_tc_color_string = DDS_INITIALIZE_STRING_TYPECODE((128));
+    static DDS_TypeCode ShapeType_g_tc_color_string = DDS_INITIALIZE_STRING_TYPECODE((128L));
 
     static DDS_TypeCode_Member ShapeType_g_tc_members[4]=
     {
@@ -517,6 +523,8 @@ DDS_TypeCode* ShapeType_get_typecode()
         return &ShapeType_g_tc;
     }
 
+    is_initialized = RTI_TRUE;
+
     ShapeType_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
     ShapeType_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&ShapeType_g_tc_color_string;
@@ -527,21 +535,18 @@ DDS_TypeCode* ShapeType_get_typecode()
     /* Initialize the values for member annotations. */
     ShapeType_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_STRING;
     ShapeType_g_tc_members[0]._annotations._defaultValue._u.string_value = (DDS_Char *) "";
-
     ShapeType_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[1]._annotations._defaultValue._u.long_value = 0;
     ShapeType_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[1]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
     ShapeType_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[1]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
-
     ShapeType_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[2]._annotations._defaultValue._u.long_value = 0;
     ShapeType_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[2]._annotations._minValue._u.long_value = RTIXCdrLong_MIN;
     ShapeType_g_tc_members[2]._annotations._maxValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[2]._annotations._maxValue._u.long_value = RTIXCdrLong_MAX;
-
     ShapeType_g_tc_members[3]._annotations._defaultValue._d = RTI_XCDR_TK_LONG;
     ShapeType_g_tc_members[3]._annotations._defaultValue._u.long_value = 0;
     ShapeType_g_tc_members[3]._annotations._minValue._d = RTI_XCDR_TK_LONG;
@@ -553,8 +558,6 @@ DDS_TypeCode* ShapeType_get_typecode()
     ShapeType_get_sample_access_info();
     ShapeType_g_tc._data._typePlugin =
     ShapeType_get_type_plugin_info();    
-
-    is_initialized = RTI_TRUE;
 
     return &ShapeType_g_tc;
 }
@@ -622,9 +625,9 @@ RTIXCdrSampleAccessInfo *ShapeType_get_sample_access_info()
     {
         size_t candidateTypeSize = sizeof(ShapeType);
 
-        if (candidateTypeSize > RTIXCdrUnsignedLong_MAX) {
+        if (candidateTypeSize > RTIXCdrLong_MAX) {
             ShapeType_g_sampleAccessInfo.typeSize[0] =
-            RTIXCdrUnsignedLong_MAX;
+            RTIXCdrLong_MAX;
         } else {
             ShapeType_g_sampleAccessInfo.typeSize[0] =
             (RTIXCdrUnsignedLong) candidateTypeSize;
@@ -644,7 +647,6 @@ RTIXCdrSampleAccessInfo *ShapeType_get_sample_access_info()
     is_initialized = RTI_TRUE;
     return (RTIXCdrSampleAccessInfo*) &ShapeType_g_sampleAccessInfo;
 }
-
 RTIXCdrTypePlugin *ShapeType_get_type_plugin_info()
 {
     static RTIXCdrTypePlugin ShapeType_g_typePlugin = 
@@ -664,6 +666,7 @@ RTIXCdrTypePlugin *ShapeType_get_type_plugin_info()
         NULL,
         (RTIXCdrTypePluginFinalizeSampleFunction)
         ShapeType_finalize_w_return,
+        NULL,
         NULL
     };
 
@@ -672,27 +675,16 @@ RTIXCdrTypePlugin *ShapeType_get_type_plugin_info()
 #endif
 
 RTIBool ShapeType_initialize(
-    ShapeType* sample) {
-    return ShapeType_initialize_ex(sample,RTI_TRUE,RTI_TRUE);
-}
-
-RTIBool ShapeType_initialize_ex(
-    ShapeType* sample,RTIBool allocatePointers, RTIBool allocateMemory)
+    ShapeType* sample)
 {
-
-    struct DDS_TypeAllocationParams_t allocParams =
-    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
-
-    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
-    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
-
-    return ShapeType_initialize_w_params(
-        sample,&allocParams);
-
+    return ShapeType_initialize_ex(
+        sample, 
+        RTI_TRUE, 
+        RTI_TRUE);
 }
-
 RTIBool ShapeType_initialize_w_params(
-    ShapeType* sample, const struct DDS_TypeAllocationParams_t * allocParams)
+    ShapeType *sample,
+    const struct DDS_TypeAllocationParams_t *allocParams)
 {
 
     if (sample == NULL) {
@@ -703,22 +695,28 @@ RTIBool ShapeType_initialize_w_params(
     }
 
     if (allocParams->allocate_memory) {
-        sample->color = DDS_String_alloc((128));
-        RTICdrType_copyStringEx(
-            &sample->color,
-            "",
-            (128),
-            RTI_FALSE);
+        sample->color = DDS_String_alloc((128L));
+        if (sample->color != NULL) {
+            RTIOsapiUtility_unusedReturnValue(
+                RTICdrType_copyStringEx(
+                    &sample->color,
+                    "",
+                    (128L),
+                    RTI_FALSE),
+                    RTIBool);
+        }
         if (sample->color == NULL) {
             return RTI_FALSE;
         }
     } else {
         if (sample->color != NULL) {
-            RTICdrType_copyStringEx(
-                &sample->color,
-                "",
-                (128),
-                RTI_FALSE);
+            RTIOsapiUtility_unusedReturnValue(
+                RTICdrType_copyStringEx(
+                    &sample->color,
+                    "",
+                    (128L),
+                    RTI_FALSE),
+                    RTIBool);
             if (sample->color == NULL) {
                 return RTI_FALSE;
             }
@@ -733,6 +731,22 @@ RTIBool ShapeType_initialize_w_params(
 
     return RTI_TRUE;
 }
+RTIBool ShapeType_initialize_ex(
+    ShapeType *sample,
+    RTIBool allocatePointers, 
+    RTIBool allocateMemory)
+{
+
+    struct DDS_TypeAllocationParams_t allocParams =
+    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
+
+    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
+    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
+
+    return ShapeType_initialize_w_params(
+        sample,
+        &allocParams);
+}
 
 RTIBool ShapeType_finalize_w_return(
     ShapeType* sample)
@@ -744,13 +758,15 @@ RTIBool ShapeType_finalize_w_return(
 
 void ShapeType_finalize(
     ShapeType* sample)
-{
-
-    ShapeType_finalize_ex(sample,RTI_TRUE);
+{  
+    ShapeType_finalize_ex(
+        sample, 
+        RTI_TRUE);
 }
 
 void ShapeType_finalize_ex(
-    ShapeType* sample,RTIBool deletePointers)
+    ShapeType *sample,
+    RTIBool deletePointers)
 {
     struct DDS_TypeDeallocationParams_t deallocParams =
     DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
@@ -762,13 +778,14 @@ void ShapeType_finalize_ex(
     deallocParams.delete_pointers = (DDS_Boolean)deletePointers;
 
     ShapeType_finalize_w_params(
-        sample,&deallocParams);
+        sample,
+        &deallocParams);
 }
 
 void ShapeType_finalize_w_params(
-    ShapeType* sample,const struct DDS_TypeDeallocationParams_t * deallocParams)
+    ShapeType *sample,
+    const struct DDS_TypeDeallocationParams_t *deallocParams)
 {
-
     if (sample==NULL) {
         return;
     }
@@ -814,25 +831,30 @@ RTIBool ShapeType_copy(
         }
 
         if (!RTICdrType_copyStringEx (
-            &dst->color, src->color, 
-            (128) + 1, RTI_FALSE)){
+            &dst->color
+            ,
+            src->color, 
+            (128L) + 1,
+            RTI_FALSE)){
             return RTI_FALSE;
         }
         if (!RTICdrType_copyLong (
-            &dst->x, &src->x)) { 
+            &dst->x, 
+            &src->x)) { 
             return RTI_FALSE;
         }
         if (!RTICdrType_copyLong (
-            &dst->y, &src->y)) { 
+            &dst->y, 
+            &src->y)) { 
             return RTI_FALSE;
         }
         if (!RTICdrType_copyLong (
-            &dst->shapesize, &src->shapesize)) { 
+            &dst->shapesize, 
+            &src->shapesize)) { 
             return RTI_FALSE;
         }
 
         return RTI_TRUE;
-
     } catch (const std::bad_alloc&) {
         return RTI_FALSE;
     }
@@ -873,7 +895,7 @@ RTIBool ShapeType_copy(
 const char *ShapeTypeExtendedTYPENAME = "ShapeTypeExtended";
 
 #ifndef NDDS_STANDALONE_TYPE
-DDS_TypeCode* ShapeTypeExtended_get_typecode()
+DDS_TypeCode * ShapeTypeExtended_get_typecode(void)
 {
     static RTIBool is_initialized = RTI_FALSE;
 
@@ -941,6 +963,8 @@ DDS_TypeCode* ShapeTypeExtended_get_typecode()
         return &ShapeTypeExtended_g_tc;
     }
 
+    is_initialized = RTI_TRUE;
+
     ShapeTypeExtended_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
     ShapeTypeExtended_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)ShapeFillKind_get_typecode();
@@ -949,7 +973,6 @@ DDS_TypeCode* ShapeTypeExtended_get_typecode()
     /* Initialize the values for member annotations. */
     ShapeTypeExtended_g_tc_members[0]._annotations._defaultValue._d = RTI_XCDR_TK_ENUM;
     ShapeTypeExtended_g_tc_members[0]._annotations._defaultValue._u.enumerated_value = 0;
-
     ShapeTypeExtended_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_FLOAT;
     ShapeTypeExtended_g_tc_members[1]._annotations._defaultValue._u.float_value = 0.0f;
     ShapeTypeExtended_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_FLOAT;
@@ -963,8 +986,6 @@ DDS_TypeCode* ShapeTypeExtended_get_typecode()
     ShapeTypeExtended_get_sample_access_info();
     ShapeTypeExtended_g_tc._data._typePlugin =
     ShapeTypeExtended_get_type_plugin_info();    
-
-    is_initialized = RTI_TRUE;
 
     return &ShapeTypeExtended_g_tc;
 }
@@ -1026,9 +1047,9 @@ RTIXCdrSampleAccessInfo *ShapeTypeExtended_get_sample_access_info()
     {
         size_t candidateTypeSize = sizeof(ShapeTypeExtended);
 
-        if (candidateTypeSize > RTIXCdrUnsignedLong_MAX) {
+        if (candidateTypeSize > RTIXCdrLong_MAX) {
             ShapeTypeExtended_g_sampleAccessInfo.typeSize[0] =
-            RTIXCdrUnsignedLong_MAX;
+            RTIXCdrLong_MAX;
         } else {
             ShapeTypeExtended_g_sampleAccessInfo.typeSize[0] =
             (RTIXCdrUnsignedLong) candidateTypeSize;
@@ -1048,7 +1069,6 @@ RTIXCdrSampleAccessInfo *ShapeTypeExtended_get_sample_access_info()
     is_initialized = RTI_TRUE;
     return (RTIXCdrSampleAccessInfo*) &ShapeTypeExtended_g_sampleAccessInfo;
 }
-
 RTIXCdrTypePlugin *ShapeTypeExtended_get_type_plugin_info()
 {
     static RTIXCdrTypePlugin ShapeTypeExtended_g_typePlugin = 
@@ -1068,6 +1088,7 @@ RTIXCdrTypePlugin *ShapeTypeExtended_get_type_plugin_info()
         NULL,
         (RTIXCdrTypePluginFinalizeSampleFunction)
         ShapeTypeExtended_finalize_w_return,
+        NULL,
         NULL
     };
 
@@ -1076,12 +1097,39 @@ RTIXCdrTypePlugin *ShapeTypeExtended_get_type_plugin_info()
 #endif
 
 RTIBool ShapeTypeExtended_initialize(
-    ShapeTypeExtended* sample) {
-    return ShapeTypeExtended_initialize_ex(sample,RTI_TRUE,RTI_TRUE);
+    ShapeTypeExtended* sample)
+{
+    return ShapeTypeExtended_initialize_ex(
+        sample, 
+        RTI_TRUE, 
+        RTI_TRUE);
 }
+RTIBool ShapeTypeExtended_initialize_w_params(
+    ShapeTypeExtended *sample,
+    const struct DDS_TypeAllocationParams_t *allocParams)
+{
 
+    if (sample == NULL) {
+        return RTI_FALSE;
+    }
+    if (allocParams == NULL) {
+        return RTI_FALSE;
+    }
+    if (!ShapeType_initialize_w_params(
+        (ShapeType*) sample,
+        allocParams)) {
+        return RTI_FALSE;
+    }
+
+    sample->fillKind = SOLID_FILL;
+    sample->angle = 0.0f;
+
+    return RTI_TRUE;
+}
 RTIBool ShapeTypeExtended_initialize_ex(
-    ShapeTypeExtended* sample,RTIBool allocatePointers, RTIBool allocateMemory)
+    ShapeTypeExtended *sample,
+    RTIBool allocatePointers, 
+    RTIBool allocateMemory)
 {
 
     struct DDS_TypeAllocationParams_t allocParams =
@@ -1091,29 +1139,8 @@ RTIBool ShapeTypeExtended_initialize_ex(
     allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
 
     return ShapeTypeExtended_initialize_w_params(
-        sample,&allocParams);
-
-}
-
-RTIBool ShapeTypeExtended_initialize_w_params(
-    ShapeTypeExtended* sample, const struct DDS_TypeAllocationParams_t * allocParams)
-{
-
-    if (sample == NULL) {
-        return RTI_FALSE;
-    }
-    if (allocParams == NULL) {
-        return RTI_FALSE;
-    }
-    if (!ShapeType_initialize_w_params((ShapeType*)sample,allocParams)) {
-        return RTI_FALSE;
-    }
-
-    sample->fillKind = SOLID_FILL;
-
-    sample->angle = 0.0f;
-
-    return RTI_TRUE;
+        sample,
+        &allocParams);
 }
 
 RTIBool ShapeTypeExtended_finalize_w_return(
@@ -1126,13 +1153,15 @@ RTIBool ShapeTypeExtended_finalize_w_return(
 
 void ShapeTypeExtended_finalize(
     ShapeTypeExtended* sample)
-{
-
-    ShapeTypeExtended_finalize_ex(sample,RTI_TRUE);
+{  
+    ShapeTypeExtended_finalize_ex(
+        sample, 
+        RTI_TRUE);
 }
 
 void ShapeTypeExtended_finalize_ex(
-    ShapeTypeExtended* sample,RTIBool deletePointers)
+    ShapeTypeExtended *sample,
+    RTIBool deletePointers)
 {
     struct DDS_TypeDeallocationParams_t deallocParams =
     DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
@@ -1144,13 +1173,14 @@ void ShapeTypeExtended_finalize_ex(
     deallocParams.delete_pointers = (DDS_Boolean)deletePointers;
 
     ShapeTypeExtended_finalize_w_params(
-        sample,&deallocParams);
+        sample,
+        &deallocParams);
 }
 
 void ShapeTypeExtended_finalize_w_params(
-    ShapeTypeExtended* sample,const struct DDS_TypeDeallocationParams_t * deallocParams)
+    ShapeTypeExtended *sample,
+    const struct DDS_TypeDeallocationParams_t *deallocParams)
 {
-
     if (sample==NULL) {
         return;
     }
@@ -1158,9 +1188,14 @@ void ShapeTypeExtended_finalize_w_params(
     if (deallocParams == NULL) {
         return;
     }
-    ShapeType_finalize_w_params((ShapeType*)sample,deallocParams);
 
-    ShapeFillKind_finalize_w_params(&sample->fillKind,deallocParams);
+    ShapeType_finalize_w_params(
+        (ShapeType*) sample,
+        deallocParams);
+
+    ShapeFillKind_finalize_w_params(
+        &sample->fillKind,
+        deallocParams);
 
 }
 
@@ -1182,7 +1217,6 @@ void ShapeTypeExtended_finalize_optional_members(
     deallocParamsTmp.delete_pointers = (DDS_Boolean)deletePointers;
     deallocParamsTmp.delete_optional_members = DDS_BOOLEAN_TRUE;
 
-    ShapeFillKind_finalize_optional_members(&sample->fillKind, deallocParams->delete_pointers);
 }
 
 RTIBool ShapeTypeExtended_copy(
@@ -1195,21 +1229,24 @@ RTIBool ShapeTypeExtended_copy(
             return RTI_FALSE;
         }
 
-        if(!ShapeType_copy((ShapeType*)dst,(const ShapeType*)src)) {
+        if(!ShapeType_copy(
+            (ShapeType*)dst,
+            (const ShapeType*)src)) {
             return RTI_FALSE;
         }
 
         if (!ShapeFillKind_copy(
-            &dst->fillKind,(const ShapeFillKind*)&src->fillKind)) {
+            &dst->fillKind,
+            (const ShapeFillKind*)&src->fillKind)) {
             return RTI_FALSE;
         } 
         if (!RTICdrType_copyFloat (
-            &dst->angle, &src->angle)) { 
+            &dst->angle, 
+            &src->angle)) { 
             return RTI_FALSE;
         }
 
         return RTI_TRUE;
-
     } catch (const std::bad_alloc&) {
         return RTI_FALSE;
     }
@@ -1250,11 +1287,11 @@ RTIBool ShapeTypeExtended_copy(
 const char *PixyCamConfigTYPENAME = "PixyCamConfig";
 
 #ifndef NDDS_STANDALONE_TYPE
-DDS_TypeCode* PixyCamConfig_get_typecode()
+DDS_TypeCode * PixyCamConfig_get_typecode(void)
 {
     static RTIBool is_initialized = RTI_FALSE;
 
-    static DDS_TypeCode PixyCamConfig_g_tc_profileEnabled_array =DDS_INITIALIZE_ARRAY_TYPECODE(1,7, NULL,NULL);
+    static DDS_TypeCode PixyCamConfig_g_tc_profileEnabled_array =DDS_INITIALIZE_ARRAY_TYPECODE(1,7L, NULL,NULL);
 
     static DDS_TypeCode_Member PixyCamConfig_g_tc_members[1]=
     {
@@ -1302,6 +1339,8 @@ DDS_TypeCode* PixyCamConfig_get_typecode()
         return &PixyCamConfig_g_tc;
     }
 
+    is_initialized = RTI_TRUE;
+
     PixyCamConfig_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
     PixyCamConfig_g_tc_profileEnabled_array._data._typeCode =(RTICdrTypeCode *)&DDS_g_tc_boolean_w_new;
@@ -1313,8 +1352,6 @@ DDS_TypeCode* PixyCamConfig_get_typecode()
     PixyCamConfig_get_sample_access_info();
     PixyCamConfig_g_tc._data._typePlugin =
     PixyCamConfig_get_type_plugin_info();    
-
-    is_initialized = RTI_TRUE;
 
     return &PixyCamConfig_g_tc;
 }
@@ -1373,9 +1410,9 @@ RTIXCdrSampleAccessInfo *PixyCamConfig_get_sample_access_info()
     {
         size_t candidateTypeSize = sizeof(PixyCamConfig);
 
-        if (candidateTypeSize > RTIXCdrUnsignedLong_MAX) {
+        if (candidateTypeSize > RTIXCdrLong_MAX) {
             PixyCamConfig_g_sampleAccessInfo.typeSize[0] =
-            RTIXCdrUnsignedLong_MAX;
+            RTIXCdrLong_MAX;
         } else {
             PixyCamConfig_g_sampleAccessInfo.typeSize[0] =
             (RTIXCdrUnsignedLong) candidateTypeSize;
@@ -1395,7 +1432,6 @@ RTIXCdrSampleAccessInfo *PixyCamConfig_get_sample_access_info()
     is_initialized = RTI_TRUE;
     return (RTIXCdrSampleAccessInfo*) &PixyCamConfig_g_sampleAccessInfo;
 }
-
 RTIXCdrTypePlugin *PixyCamConfig_get_type_plugin_info()
 {
     static RTIXCdrTypePlugin PixyCamConfig_g_typePlugin = 
@@ -1415,6 +1451,7 @@ RTIXCdrTypePlugin *PixyCamConfig_get_type_plugin_info()
         NULL,
         (RTIXCdrTypePluginFinalizeSampleFunction)
         PixyCamConfig_finalize_w_return,
+        NULL,
         NULL
     };
 
@@ -1423,27 +1460,16 @@ RTIXCdrTypePlugin *PixyCamConfig_get_type_plugin_info()
 #endif
 
 RTIBool PixyCamConfig_initialize(
-    PixyCamConfig* sample) {
-    return PixyCamConfig_initialize_ex(sample,RTI_TRUE,RTI_TRUE);
-}
-
-RTIBool PixyCamConfig_initialize_ex(
-    PixyCamConfig* sample,RTIBool allocatePointers, RTIBool allocateMemory)
+    PixyCamConfig* sample)
 {
-
-    struct DDS_TypeAllocationParams_t allocParams =
-    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
-
-    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
-    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
-
-    return PixyCamConfig_initialize_w_params(
-        sample,&allocParams);
-
+    return PixyCamConfig_initialize_ex(
+        sample, 
+        RTI_TRUE, 
+        RTI_TRUE);
 }
-
 RTIBool PixyCamConfig_initialize_w_params(
-    PixyCamConfig* sample, const struct DDS_TypeAllocationParams_t * allocParams)
+    PixyCamConfig *sample,
+    const struct DDS_TypeAllocationParams_t *allocParams)
 {
 
     if (sample == NULL) {
@@ -1453,11 +1479,26 @@ RTIBool PixyCamConfig_initialize_w_params(
         return RTI_FALSE;
     }
 
-    if (!RTICdrType_initArray(
-        sample->profileEnabled, (7), RTI_CDR_BOOLEAN_SIZE)) {
-        return RTI_FALSE;
-    }
+    RTICdrType_initArrayUnsafe(sample->profileEnabled,
+    (7L),
+    RTI_CDR_BOOLEAN_SIZE);
     return RTI_TRUE;
+}
+RTIBool PixyCamConfig_initialize_ex(
+    PixyCamConfig *sample,
+    RTIBool allocatePointers, 
+    RTIBool allocateMemory)
+{
+
+    struct DDS_TypeAllocationParams_t allocParams =
+    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
+
+    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
+    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
+
+    return PixyCamConfig_initialize_w_params(
+        sample,
+        &allocParams);
 }
 
 RTIBool PixyCamConfig_finalize_w_return(
@@ -1470,13 +1511,15 @@ RTIBool PixyCamConfig_finalize_w_return(
 
 void PixyCamConfig_finalize(
     PixyCamConfig* sample)
-{
-
-    PixyCamConfig_finalize_ex(sample,RTI_TRUE);
+{  
+    PixyCamConfig_finalize_ex(
+        sample, 
+        RTI_TRUE);
 }
 
 void PixyCamConfig_finalize_ex(
-    PixyCamConfig* sample,RTIBool deletePointers)
+    PixyCamConfig *sample,
+    RTIBool deletePointers)
 {
     struct DDS_TypeDeallocationParams_t deallocParams =
     DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
@@ -1488,13 +1531,14 @@ void PixyCamConfig_finalize_ex(
     deallocParams.delete_pointers = (DDS_Boolean)deletePointers;
 
     PixyCamConfig_finalize_w_params(
-        sample,&deallocParams);
+        sample,
+        &deallocParams);
 }
 
 void PixyCamConfig_finalize_w_params(
-    PixyCamConfig* sample,const struct DDS_TypeDeallocationParams_t * deallocParams)
+    PixyCamConfig *sample,
+    const struct DDS_TypeDeallocationParams_t *deallocParams)
 {
-
     if (sample==NULL) {
         return;
     }
@@ -1534,12 +1578,14 @@ RTIBool PixyCamConfig_copy(
         }
 
         if (!RTICdrType_copyArray(
-            dst->profileEnabled ,src->profileEnabled,(7), RTI_CDR_BOOLEAN_SIZE)) {
+            dst->profileEnabled,
+            src->profileEnabled,
+            (7L),
+            RTI_CDR_BOOLEAN_SIZE)) {
             return RTI_FALSE;
         }
 
         return RTI_TRUE;
-
     } catch (const std::bad_alloc&) {
         return RTI_FALSE;
     }
@@ -1579,17 +1625,17 @@ RTIBool PixyCamConfig_copy(
 #ifndef NDDS_STANDALONE_TYPE
 namespace rti { 
     namespace xcdr {
-        const RTIXCdrTypeCode * type_code<ShapeType>::get() 
+        const RTIXCdrTypeCode * type_code< ShapeType>::get() 
         {
             return (const RTIXCdrTypeCode *) ShapeType_get_typecode();
         }
 
-        const RTIXCdrTypeCode * type_code<ShapeTypeExtended>::get() 
+        const RTIXCdrTypeCode * type_code< ShapeTypeExtended>::get() 
         {
             return (const RTIXCdrTypeCode *) ShapeTypeExtended_get_typecode();
         }
 
-        const RTIXCdrTypeCode * type_code<PixyCamConfig>::get() 
+        const RTIXCdrTypeCode * type_code< PixyCamConfig>::get() 
         {
             return (const RTIXCdrTypeCode *) PixyCamConfig_get_typecode();
         }

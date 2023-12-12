@@ -3,10 +3,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ServoControl.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ServoControl.idl 
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #ifndef NDDS_STANDALONE_TYPE
@@ -16,7 +17,8 @@ or consult the RTI Connext manual.
 #ifndef dds_c_log_impl_h              
 #include "dds_c/dds_c_log_impl.h"                                
 #endif 
-#ifndef dds_c_log_infrastructure_h                      
+
+#ifndef dds_c_log_infrastructure_h
 #include "dds_c/dds_c_infrastructure_impl.h"       
 #endif 
 
@@ -43,7 +45,7 @@ or consult the RTI Connext manual.
 const char *ServoControlTYPENAME = "ServoControl";
 
 #ifndef NDDS_STANDALONE_TYPE
-DDS_TypeCode* ServoControl_get_typecode()
+DDS_TypeCode * ServoControl_get_typecode(void)
 {
     static RTIBool is_initialized = RTI_FALSE;
 
@@ -129,6 +131,8 @@ DDS_TypeCode* ServoControl_get_typecode()
         return &ServoControl_g_tc;
     }
 
+    is_initialized = RTI_TRUE;
+
     ServoControl_g_tc._data._annotations._allowedDataRepresentationMask = 5;
 
     ServoControl_g_tc_members[0]._representation._typeCode = (RTICdrTypeCode *)&DDS_g_tc_ushort_w_new;
@@ -142,14 +146,12 @@ DDS_TypeCode* ServoControl_get_typecode()
     ServoControl_g_tc_members[0]._annotations._minValue._u.ushort_value = RTIXCdrUnsignedShort_MIN;
     ServoControl_g_tc_members[0]._annotations._maxValue._d = RTI_XCDR_TK_USHORT;
     ServoControl_g_tc_members[0]._annotations._maxValue._u.ushort_value = RTIXCdrUnsignedShort_MAX;
-
     ServoControl_g_tc_members[1]._annotations._defaultValue._d = RTI_XCDR_TK_USHORT;
     ServoControl_g_tc_members[1]._annotations._defaultValue._u.ushort_value = 0;
     ServoControl_g_tc_members[1]._annotations._minValue._d = RTI_XCDR_TK_USHORT;
     ServoControl_g_tc_members[1]._annotations._minValue._u.ushort_value = RTIXCdrUnsignedShort_MIN;
     ServoControl_g_tc_members[1]._annotations._maxValue._d = RTI_XCDR_TK_USHORT;
     ServoControl_g_tc_members[1]._annotations._maxValue._u.ushort_value = RTIXCdrUnsignedShort_MAX;
-
     ServoControl_g_tc_members[2]._annotations._defaultValue._d = RTI_XCDR_TK_USHORT;
     ServoControl_g_tc_members[2]._annotations._defaultValue._u.ushort_value = 0;
     ServoControl_g_tc_members[2]._annotations._minValue._d = RTI_XCDR_TK_USHORT;
@@ -161,8 +163,6 @@ DDS_TypeCode* ServoControl_get_typecode()
     ServoControl_get_sample_access_info();
     ServoControl_g_tc._data._typePlugin =
     ServoControl_get_type_plugin_info();    
-
-    is_initialized = RTI_TRUE;
 
     return &ServoControl_g_tc;
 }
@@ -227,9 +227,9 @@ RTIXCdrSampleAccessInfo *ServoControl_get_sample_access_info()
     {
         size_t candidateTypeSize = sizeof(ServoControl);
 
-        if (candidateTypeSize > RTIXCdrUnsignedLong_MAX) {
+        if (candidateTypeSize > RTIXCdrLong_MAX) {
             ServoControl_g_sampleAccessInfo.typeSize[0] =
-            RTIXCdrUnsignedLong_MAX;
+            RTIXCdrLong_MAX;
         } else {
             ServoControl_g_sampleAccessInfo.typeSize[0] =
             (RTIXCdrUnsignedLong) candidateTypeSize;
@@ -249,7 +249,6 @@ RTIXCdrSampleAccessInfo *ServoControl_get_sample_access_info()
     is_initialized = RTI_TRUE;
     return (RTIXCdrSampleAccessInfo*) &ServoControl_g_sampleAccessInfo;
 }
-
 RTIXCdrTypePlugin *ServoControl_get_type_plugin_info()
 {
     static RTIXCdrTypePlugin ServoControl_g_typePlugin = 
@@ -269,6 +268,7 @@ RTIXCdrTypePlugin *ServoControl_get_type_plugin_info()
         NULL,
         (RTIXCdrTypePluginFinalizeSampleFunction)
         ServoControl_finalize_w_return,
+        NULL,
         NULL
     };
 
@@ -277,27 +277,16 @@ RTIXCdrTypePlugin *ServoControl_get_type_plugin_info()
 #endif
 
 RTIBool ServoControl_initialize(
-    ServoControl* sample) {
-    return ServoControl_initialize_ex(sample,RTI_TRUE,RTI_TRUE);
-}
-
-RTIBool ServoControl_initialize_ex(
-    ServoControl* sample,RTIBool allocatePointers, RTIBool allocateMemory)
+    ServoControl* sample)
 {
-
-    struct DDS_TypeAllocationParams_t allocParams =
-    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
-
-    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
-    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
-
-    return ServoControl_initialize_w_params(
-        sample,&allocParams);
-
+    return ServoControl_initialize_ex(
+        sample, 
+        RTI_TRUE, 
+        RTI_TRUE);
 }
-
 RTIBool ServoControl_initialize_w_params(
-    ServoControl* sample, const struct DDS_TypeAllocationParams_t * allocParams)
+    ServoControl *sample,
+    const struct DDS_TypeAllocationParams_t *allocParams)
 {
 
     if (sample == NULL) {
@@ -315,6 +304,22 @@ RTIBool ServoControl_initialize_w_params(
 
     return RTI_TRUE;
 }
+RTIBool ServoControl_initialize_ex(
+    ServoControl *sample,
+    RTIBool allocatePointers, 
+    RTIBool allocateMemory)
+{
+
+    struct DDS_TypeAllocationParams_t allocParams =
+    DDS_TYPE_ALLOCATION_PARAMS_DEFAULT;
+
+    allocParams.allocate_pointers =  (DDS_Boolean)allocatePointers;
+    allocParams.allocate_memory = (DDS_Boolean)allocateMemory;
+
+    return ServoControl_initialize_w_params(
+        sample,
+        &allocParams);
+}
 
 RTIBool ServoControl_finalize_w_return(
     ServoControl* sample)
@@ -326,13 +331,15 @@ RTIBool ServoControl_finalize_w_return(
 
 void ServoControl_finalize(
     ServoControl* sample)
-{
-
-    ServoControl_finalize_ex(sample,RTI_TRUE);
+{  
+    ServoControl_finalize_ex(
+        sample, 
+        RTI_TRUE);
 }
 
 void ServoControl_finalize_ex(
-    ServoControl* sample,RTIBool deletePointers)
+    ServoControl *sample,
+    RTIBool deletePointers)
 {
     struct DDS_TypeDeallocationParams_t deallocParams =
     DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
@@ -344,13 +351,14 @@ void ServoControl_finalize_ex(
     deallocParams.delete_pointers = (DDS_Boolean)deletePointers;
 
     ServoControl_finalize_w_params(
-        sample,&deallocParams);
+        sample,
+        &deallocParams);
 }
 
 void ServoControl_finalize_w_params(
-    ServoControl* sample,const struct DDS_TypeDeallocationParams_t * deallocParams)
+    ServoControl *sample,
+    const struct DDS_TypeDeallocationParams_t *deallocParams)
 {
-
     if (sample==NULL) {
         return;
     }
@@ -390,20 +398,22 @@ RTIBool ServoControl_copy(
         }
 
         if (!RTICdrType_copyUnsignedShort (
-            &dst->pan, &src->pan)) { 
+            &dst->pan, 
+            &src->pan)) { 
             return RTI_FALSE;
         }
         if (!RTICdrType_copyUnsignedShort (
-            &dst->tilt, &src->tilt)) { 
+            &dst->tilt, 
+            &src->tilt)) { 
             return RTI_FALSE;
         }
         if (!RTICdrType_copyUnsignedShort (
-            &dst->frequency, &src->frequency)) { 
+            &dst->frequency, 
+            &src->frequency)) { 
             return RTI_FALSE;
         }
 
         return RTI_TRUE;
-
     } catch (const std::bad_alloc&) {
         return RTI_FALSE;
     }
@@ -443,7 +453,7 @@ RTIBool ServoControl_copy(
 #ifndef NDDS_STANDALONE_TYPE
 namespace rti { 
     namespace xcdr {
-        const RTIXCdrTypeCode * type_code<ServoControl>::get() 
+        const RTIXCdrTypeCode * type_code< ServoControl>::get() 
         {
             return (const RTIXCdrTypeCode *) ServoControl_get_typecode();
         }

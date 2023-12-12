@@ -2,10 +2,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ServoControl.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ServoControl.idl
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #include <string.h>
@@ -74,12 +75,37 @@ ServoControlPluginSupport_create_data_w_params(
 {
     ServoControl *sample = NULL;
 
-    sample = new (std::nothrow) ServoControl ;
+    if (alloc_params == NULL) {
+        return NULL;
+    } else if(!alloc_params->allocate_memory) {
+        RTICdrLog_exception(&RTI_CDR_LOG_TYPE_OBJECT_NOT_ASSIGNABLE_ss,
+        "alloc_params->allocate_memory","false");
+        return NULL;
+    }
+
+    sample = new (std::nothrow) ServoControl();
     if (sample == NULL) {
         return NULL;
     }
 
     if (!ServoControl_initialize_w_params(sample,alloc_params)) {
+        struct DDS_TypeDeallocationParams_t deallocParams =
+        DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
+        deallocParams.delete_pointers = alloc_params->allocate_pointers;
+        deallocParams.delete_optional_members = alloc_params->allocate_pointers;
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        allocation fails. But if the allocation fails then sample == null and
+        the method will return before reach this point.*/
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ServoControl_finalize_w_params(sample, &deallocParams);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ServoControl_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -91,13 +117,26 @@ ServoControlPluginSupport_create_data_ex(RTIBool allocate_pointers)
 {
     ServoControl *sample = NULL;
 
-    sample = new (std::nothrow) ServoControl ;
+    sample = new (std::nothrow) ServoControl();
 
     if(sample == NULL) {
         return NULL;
     }
 
     if (!ServoControl_initialize_ex(sample,allocate_pointers, RTI_TRUE)) {
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        new fails. But if new fails then sample == null and the method will
+        return before reach this point. */
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ServoControl_finalize_ex(sample, RTI_TRUE);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ServoControl_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -118,7 +157,6 @@ ServoControlPluginSupport_destroy_data_w_params(
     ServoControl_finalize_w_params(sample,dealloc_params);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -127,7 +165,6 @@ ServoControlPluginSupport_destroy_data_ex(
     ServoControl_finalize_ex(sample,deallocate_pointers);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -156,13 +193,13 @@ ServoControlPluginSupport_print_data(
     RTICdrType_printIndent(indent_level);
 
     if (desc != NULL) {
-        RTILog_debug("%s:\n", desc);
+        RTILogParamString_printPlain("%s:\n", desc);
     } else {
-        RTILog_debug("\n");
+        RTILogParamString_printPlain("\n");
     }
 
     if (sample == NULL) {
-        RTILog_debug("NULL\n");
+        RTILogParamString_printPlain("NULL\n");
         return;
     }
 
@@ -190,9 +227,9 @@ ServoControlPlugin_on_participant_attached(
     RTICdrTypeCode *type_code)
 {
     struct RTIXCdrInterpreterPrograms *programs = NULL;
-    struct PRESTypePluginDefaultParticipantData *pd = NULL;
     struct RTIXCdrInterpreterProgramsGenProperty programProperty =
     RTIXCdrInterpreterProgramsGenProperty_INITIALIZER;
+    struct PRESTypePluginDefaultParticipantData *pd = NULL;
 
     if (registration_data) {} /* To avoid warnings */
     if (participant_info) {} /* To avoid warnings */
@@ -208,6 +245,7 @@ ServoControlPlugin_on_participant_attached(
     programProperty.resolveAlias = RTI_XCDR_TRUE;
     programProperty.inlineStruct = RTI_XCDR_TRUE;
     programProperty.optimizeEnum = RTI_XCDR_TRUE;
+    programProperty.unboundedSize = RTIXCdrLong_MAX;
 
     programs = DDS_TypeCodeFactory_assert_programs_in_global_list(
         DDS_TypeCodeFactory_get_instance(),
@@ -312,6 +350,16 @@ ServoControlPlugin_return_sample(
         endpoint_data, sample, handle);
 }
 
+void ServoControlPlugin_finalize_optional_members(
+    PRESTypePluginEndpointData endpoint_data,
+    ServoControl* sample,
+    RTIBool deletePointers)
+{
+    RTIOsapiUtility_unusedParameter(endpoint_data);
+    ServoControl_finalize_optional_members(
+        sample, deletePointers);
+}
+
 RTIBool 
 ServoControlPlugin_copy_sample(
     PRESTypePluginEndpointData endpoint_data,
@@ -344,7 +392,7 @@ ServoControlPlugin_serialize_to_cdr_buffer_ex(
     struct PRESTypePluginDefaultEndpointData epd;
     RTIBool result;
     struct PRESTypePluginDefaultParticipantData pd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePlugin plugin;
 
@@ -353,7 +401,7 @@ ServoControlPlugin_serialize_to_cdr_buffer_ex(
     }
 
     RTIOsapiMemory_zero(&epd, sizeof(struct PRESTypePluginDefaultEndpointData));
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -406,7 +454,7 @@ ServoControlPlugin_serialize_to_cdr_buffer_ex(
         RTI_TRUE,
         NULL);
 
-    *length = RTICdrStream_getCurrentPositionOffset(&stream);
+    *length = (unsigned int) RTICdrStream_getCurrentPositionOffset(&stream);
     return result;
 }
 
@@ -431,12 +479,12 @@ ServoControlPlugin_deserialize_from_cdr_buffer(
 {
     struct RTICdrStream stream;
     struct PRESTypePluginDefaultEndpointData epd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePluginDefaultParticipantData pd;
     struct PRESTypePlugin plugin;
 
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -448,7 +496,8 @@ ServoControlPlugin_deserialize_from_cdr_buffer(
     }
 
     epd._assignabilityProperty.acceptUnknownEnumValue = RTI_XCDR_TRUE;
-    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = RTI_XCDR_TRUE;
+    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = 
+    RTI_XCDR_ACCEPT_UNKNOWN_DISCRIMINATOR_AND_SELECT_DEFAULT;
 
     RTICdrStream_init(&stream);
     RTICdrStream_set(&stream, (char *)buffer, length);
@@ -460,11 +509,11 @@ ServoControlPlugin_deserialize_from_cdr_buffer(
         NULL);
 }
 
-#ifndef NDDS_STANDALONE_TYPE
+#if !defined(NDDS_STANDALONE_TYPE)
 DDS_ReturnCode_t
 ServoControlPlugin_data_to_string(
     const ServoControl *sample,
-    char *str,
+    char *_str,
     DDS_UnsignedLong *str_size, 
     const struct DDS_PrintFormatProperty *property)
 {
@@ -530,7 +579,7 @@ ServoControlPlugin_data_to_string(
 
     retCode = DDS_DynamicDataFormatter_to_string_w_format(
         data, 
-        str,
+        _str,
         str_size, 
         &printFormat);
     if (retCode != DDS_RETCODE_OK) {
@@ -586,15 +635,18 @@ RTIBool ServoControlPlugin_deserialize_key(
 {
     RTIBool result;
     if (drop_sample) {} /* To avoid warnings */
-    stream->_xTypesState.unassignable = RTI_FALSE;
+    /*  Depending on the type and the flags used in rtiddsgen, coverity may detect
+    that sample is always null. Since the case is very dependant on
+    the IDL/XML and the configuration we keep the check for safety.
+    */
     result= PRESTypePlugin_interpretedDeserializeKey(
-        endpoint_data, (sample != NULL)?*sample:NULL, stream,
-        deserialize_encapsulation, deserialize_key, endpoint_plugin_qos);
-    if (result) {
-        if (stream->_xTypesState.unassignable) {
-            result = RTI_FALSE;
-        }
-    }
+        endpoint_data,
+        /* coverity[check_after_deref] */
+        (sample != NULL) ? *sample : NULL,
+        stream,
+        deserialize_encapsulation,
+        deserialize_key,
+        endpoint_plugin_qos);
     return result;    
 
 }
@@ -637,9 +689,9 @@ ServoControlPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
-struct RTIXCdrInterpreterPrograms *ServoControlPlugin_get_programs()
+struct RTIXCdrInterpreterPrograms * ServoControlPlugin_get_programs(void)
 {
-    return rti::xcdr::get_cdr_serialization_programs<
+    return ::rti::xcdr::get_cdr_serialization_programs<
     ServoControl, 
     true, true, true>();
 }
@@ -687,7 +739,7 @@ struct PRESTypePlugin *ServoControlPlugin_new(void)
     ServoControlPlugin_destroy_sample;
     plugin->finalizeOptionalMembersFnc =
     (PRESTypePluginFinalizeOptionalMembersFunction)
-    ServoControl_finalize_optional_members;
+    ServoControlPlugin_finalize_optional_members;
 
     plugin->serializeFnc = 
     (PRESTypePluginSerializeFunction) PRESTypePlugin_interpretedSerialize;
@@ -738,7 +790,7 @@ struct PRESTypePlugin *ServoControlPlugin_new(void)
     (PRESTypePluginReturnBufferFunction)
     ServoControlPlugin_return_buffer;
     plugin->getBufferWithParams = NULL;
-    plugin->returnBufferWithParams = NULL;  
+    plugin->returnBufferWithParams = NULL;
     plugin->getSerializedSampleSizeFnc =
     (PRESTypePluginGetSerializedSampleSizeFunction)
     PRESTypePlugin_interpretedGetSerializedSampleSize;

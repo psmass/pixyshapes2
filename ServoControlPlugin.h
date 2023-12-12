@@ -3,10 +3,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ServoControl.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ServoControl.idl
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #ifndef ServoControlPlugin_1848045221_h
@@ -27,7 +28,7 @@ struct RTICdrStream;
 #define NDDSUSERDllExport __declspec(dllexport)
 #endif
 
-extern "C" {
+extern "C"{
 
     #define ServoControlPlugin_get_sample PRESTypePluginDefaultEndpointData_getSample 
 
@@ -131,22 +132,12 @@ extern "C" {
         const ServoControl *sample,
         DDS_DataRepresentationId_t representation);
 
-    NDDSUSERDllExport extern RTIBool 
-    ServoControlPlugin_deserialize(
-        PRESTypePluginEndpointData endpoint_data,
-        ServoControl **sample, 
-        RTIBool * drop_sample,
-        struct RTICdrStream *stream,
-        RTIBool deserialize_encapsulation,
-        RTIBool deserialize_sample, 
-        void *endpoint_plugin_qos);
-
     NDDSUSERDllExport extern RTIBool
     ServoControlPlugin_deserialize_from_cdr_buffer(
         ServoControl *sample,
         const char * buffer,
         unsigned int length);    
-    #ifndef NDDS_STANDALONE_TYPE
+    #if !defined (NDDS_STANDALONE_TYPE)
     NDDSUSERDllExport extern DDS_ReturnCode_t
     ServoControlPlugin_data_to_string(
         const ServoControl *sample,
@@ -192,7 +183,7 @@ extern "C" {
         void *endpoint_plugin_qos);
 
     NDDSUSERDllExport extern
-    struct RTIXCdrInterpreterPrograms *ServoControlPlugin_get_programs();
+    struct RTIXCdrInterpreterPrograms * ServoControlPlugin_get_programs(void);
 
     /* Plugin Functions */
     NDDSUSERDllExport extern struct PRESTypePlugin*

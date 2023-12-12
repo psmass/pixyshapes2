@@ -5,7 +5,7 @@
 ######################################################################
 
 ifndef PIXY_HOME
-PIXY_HOME := "/home/pi/pixy2"
+PIXY_HOME := "/home/pi/rti_workspace/pixy2"
 endif
 PIXY_INCLUDES = -I$(PIXY_HOME)/src/common/inc \
    -I$(PIXY_HOME)/src/host/libpixyusb2/include \
@@ -19,39 +19,75 @@ PIXY_LIBS = -L$(PIXY_HOME)/build/libpixyusb2 -lpixy2 \
    -lboost_chrono -lpthread -lusb-1.0
 #CXX_DEFINES = -D__LIBPIXY_VERSION__=\"0.4\"
 
+
 # If undefined in the environment default NDDSHOME to install dir
 ifndef NDDSHOME
-NDDSHOME := "/Applications/rti_connext_dds-6.0.0"
+    NDDSHOME := "/Applications/rti_connext_dds-7.2.0"
 endif
 
-#TARGET_ARCH = armv7aLinux3.12gcc4.9.3cortex-a9
-TARGET_ARCH = armv6vfphLinux3.xgcc4.7.2
+SOURCE_DIR = 
+
+TARGET_ARCH = armv8Linux4gcc7.3.0
 
 ifndef COMPILER
-COMPILER = arm-linux-gnueabihf-g++
+    COMPILER = aarch64-linux-gnu-g++
 endif
 COMPILER_FLAGS =
 ifndef LINKER
-LINKER = arm-linux-gnueabihf-g++
+    LINKER = aarch64-linux-gnu-g++
 endif
 LINKER_FLAGS = -static-libgcc
-SYSLIBS = -ldl -lnsl -lm -lpthread -lrt
-DEFINES = -fpic -DRTI_UNIX -DRTI_LINUX -march=armv6 -mlong-calls -D__LIBPIXY_VERSION__=\"0.4\"
-#DEFINES = -fpic -DRTI_UNIX -DRTI_LINUX -march=armv7-a -mcpu=cortex-a9 -mlong-calls -D__LIBPIXY_VERSION__=\"0.4\"
 
-INCLUDES = -I. -I$(NDDSHOME)/include -I$(NDDSHOME)/include/ndds
+SYSLIBS = -ldl -lm -lpthread -lrt -no-pie -rdynamic
+DEFINES = -fPIC -DRTI_UNIX -DRTI_LINUX -DRTI_64BIT -funwind-tables 
+ifndef DEBUG
+    DEBUG=0
+endif
+ifeq ($(DEBUG),1)
+    COMPILER_FLAGS += -g -O0
+    LINKER_FLAGS += -g
+    DEBUG_SFX = d
+else
+    DEBUG_SFX = 
+endif
 
+# replace TARGET_ID with the android platfrom that you want to use
+# use "android list targets" to see the list of available targets
+TARGET_ID = ${archMap.TARGET_ID}
+ 
+ifndef SHAREDLIB
+    SHAREDLIB=0
+endif
+
+
+ifeq ($(SHAREDLIB),1)
+    SHAREDLIB_SFX =
+    STATIC_LIBRARIES =
+
+else
+    SHAREDLIB_SFX = z
+    DEFINES += -DRTI_STATIC
+
+    
+endif
+
+
+
+INCLUDES = -I. -I$(NDDSHOME)/include -I$(NDDSHOME)/include/ndds 
+       
 LIBS = -L$(NDDSHOME)/lib/$(TARGET_ARCH) \
-       -L$(RTI_OPENSSLHOME) \
-       -lnddssecurity \
-       -lnddscpp -lnddsc -lnddscore $(SYSLIBS) \
-       -lssl -lcrypto
+       
+LIBS += 
+
+LIBS +=  -lnddscpp$(SHAREDLIB_SFX)$(DEBUG_SFX) -lnddsc$(SHAREDLIB_SFX)$(DEBUG_SFX) -lnddscore$(SHAREDLIB_SFX)$(DEBUG_SFX) \
+        \
+       $(STATIC_LIBRARIES) $(SYSLIBS)
 
 CDRSOURCES    = ShapeType.idl
-COMMONSOURCES = ShapeTypeSupport.cxx ShapeTypePlugin.cxx ShapeType.cxx \
-                ServoControlSupport.cxx ServoControlPlugin.cxx ServoControl.cxx
+SOURCES = $(SOURCE_DIR)ShapeTypePlugin.cxx $(SOURCE_DIR)ShapeType.cxx $(SOURCE_DIR)ShapeTypeSupport.cxx \
+         $(SOURCE_DIR)ServoControlPlugin.cxx $(SOURCE_DIR)ServoControl.cxx $(SOURCE_DIR)ServoControlSupport.cxx 
+COMMONSOURCES = $(notdir $(SOURCES))
 
-#EXEC          = ShapeType_subscriber ShapeType_publisher pixyshapes
 EXEC          = pixyshapes
 DIRECTORIES   = objs.dir objs/$(TARGET_ARCH).dir
 COMMONOBJS    = $(COMMONSOURCES:%.cxx=objs/$(TARGET_ARCH)/%.o)
@@ -62,26 +98,26 @@ $(TARGET_ARCH) : $(DIRECTORIES) $(COMMONOBJS) \
 	$(EXEC:%=objs/$(TARGET_ARCH)/%)
 
 objs/$(TARGET_ARCH)/% : objs/$(TARGET_ARCH)/%.o
-	$(LINKER) $(LINKER_FLAGS)   -o $@ $@.o $(COMMONOBJS) $(PIXY_LIBS) $(LIBS)
-#	$(LINKER) $(LINKER_FLAGS)   -o $@ $@.o $(COMMONOBJS) $(LIBS)
+	$(LINKER) $(LINKER_FLAGS) -o $@ $@.o $(COMMONOBJS) $(PIXY_LIBS) $(LIBS)
 
-objs/$(TARGET_ARCH)/%.o : %.cxx  ShapeType.h
-	$(COMPILER) $(COMPILER_FLAGS)  -o $@ $(DEFINES) $(PIXY_INCLUDES) $(INCLUDES) -c $<
+objs/$(TARGET_ARCH)/%.o : $(SOURCE_DIR)%.cxx   $(SOURCE_DIR)ShapeType.h 
+	$(COMPILER) $(COMPILER_FLAGS) -o $@ $(DEFINES) $(PIXY_INCLUDES) $(INCLUDES) -c $<
 
 #
 # Uncomment these lines if you want the support files regenerated when idl
 # file is modified
 #
 #
-#  ShapeTypeSupport.cxx ShapeTypePlugin.cxx ShapeType.cxx \
-#  ShapeTypeSupport.h ShapeTypePlugin.h ShapeType.h : \
-#		ShapeType.idl
-#	$(NDDSHOME)/bin/rtiddsgen ShapeType.idl -replace -language C++
-
+#  $(SOURCE_DIR)ShapeTypePlugin.cxx $(SOURCE_DIR)ShapeType.cxx $(SOURCE_DIR)ShapeTypeSupport.cxx \
+#  $(SOURCE_DIR)ShapeType.h $(SOURCE_DIR)ShapeTypePlugin.h $(SOURCE_DIR)ShapeTypeSupport.h $(SOURCE_DIR)application.h : \
+#		$(SOURCE_DIR)ShapeType.idl
+#	$(NDDSHOME)/bin/rtiddsgen $(SOURCE_DIR)ShapeType.idl -replace -language C++98
+#
 # Here is how we create those subdirectories automatically.
-%.dir :
+%.dir : 
 	@echo "Checking directory $*"
 	@if [ ! -d $* ]; then \
 		echo "Making directory $*"; \
 		mkdir -p $* ; \
 	fi;
+

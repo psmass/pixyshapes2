@@ -3,10 +3,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ShapeType.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ShapeType.idl
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #ifndef ShapeType_434673938_h
@@ -23,10 +24,10 @@ or consult the RTI Connext manual.
 
 typedef enum ShapeFillKind
 {
-    SOLID_FILL ,      
-    TRANSPARENT_FILL ,      
-    HORIZONTAL_HATCH_FILL ,      
-    VERTICAL_HATCH_FILL      
+    SOLID_FILL , 
+    TRANSPARENT_FILL , 
+    HORIZONTAL_HATCH_FILL , 
+    VERTICAL_HATCH_FILL 
 } ShapeFillKind;
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
 /* If the code is building on Windows, start exporting symbols.
@@ -36,12 +37,11 @@ typedef enum ShapeFillKind
 #endif
 
 #ifndef NDDS_STANDALONE_TYPE
-NDDSUSERDllExport DDS_TypeCode* ShapeFillKind_get_typecode(void); /* Type code */
+NDDSUSERDllExport DDS_TypeCode * ShapeFillKind_get_typecode(void); /* Type code */
 NDDSUSERDllExport RTIXCdrTypePlugin *ShapeFillKind_get_type_plugin_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeFillKind_get_sample_access_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeFillKind_get_sample_seq_access_info(void);
 #endif
-
 DDS_SEQUENCE(ShapeFillKindSeq, ShapeFillKind);
 
 NDDSUSERDllExport
@@ -89,6 +89,7 @@ RTIBool ShapeFillKind_copy(
 #undef NDDSUSERDllExport
 #define NDDSUSERDllExport
 #endif
+
 extern "C" {
 
     extern const char *ShapeTypeTYPENAME;
@@ -125,12 +126,11 @@ class ShapeType
 #endif
 
 #ifndef NDDS_STANDALONE_TYPE
-NDDSUSERDllExport DDS_TypeCode* ShapeType_get_typecode(void); /* Type code */
+NDDSUSERDllExport DDS_TypeCode * ShapeType_get_typecode(void); /* Type code */
 NDDSUSERDllExport RTIXCdrTypePlugin *ShapeType_get_type_plugin_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeType_get_sample_access_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeType_get_sample_seq_access_info(void);
 #endif
-
 DDS_SEQUENCE(ShapeTypeSeq, ShapeType);
 
 NDDSUSERDllExport
@@ -178,6 +178,7 @@ RTIBool ShapeType_copy(
 #undef NDDSUSERDllExport
 #define NDDSUSERDllExport
 #endif
+
 extern "C" {
 
     extern const char *ShapeTypeExtendedTYPENAME;
@@ -212,12 +213,11 @@ class ShapeTypeExtended
 #endif
 
 #ifndef NDDS_STANDALONE_TYPE
-NDDSUSERDllExport DDS_TypeCode* ShapeTypeExtended_get_typecode(void); /* Type code */
+NDDSUSERDllExport DDS_TypeCode * ShapeTypeExtended_get_typecode(void); /* Type code */
 NDDSUSERDllExport RTIXCdrTypePlugin *ShapeTypeExtended_get_type_plugin_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeTypeExtended_get_sample_access_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *ShapeTypeExtended_get_sample_seq_access_info(void);
 #endif
-
 DDS_SEQUENCE(ShapeTypeExtendedSeq, ShapeTypeExtended);
 
 NDDSUSERDllExport
@@ -266,6 +266,7 @@ RTIBool ShapeTypeExtended_copy(
 #define NDDSUSERDllExport
 #endif
 static const DDS_Char * const DEFAULT_CAM_CONFIG_TOPIC_NAME= "pixy/camconfig";
+
 extern "C" {
 
     extern const char *PixyCamConfigTYPENAME;
@@ -288,7 +289,7 @@ class PixyCamConfig
     typedef PixyCamConfigDataReader DataReader;
     #endif
 
-    DDS_Boolean   profileEnabled [7];
+    DDS_Boolean   profileEnabled [7L];
 
 };
 #if (defined(RTI_WIN32) || defined (RTI_WINCE) || defined(RTI_INTIME)) && defined(NDDS_USER_DLL_EXPORT)
@@ -299,12 +300,11 @@ class PixyCamConfig
 #endif
 
 #ifndef NDDS_STANDALONE_TYPE
-NDDSUSERDllExport DDS_TypeCode* PixyCamConfig_get_typecode(void); /* Type code */
+NDDSUSERDllExport DDS_TypeCode * PixyCamConfig_get_typecode(void); /* Type code */
 NDDSUSERDllExport RTIXCdrTypePlugin *PixyCamConfig_get_type_plugin_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *PixyCamConfig_get_sample_access_info(void);
 NDDSUSERDllExport RTIXCdrSampleAccessInfo *PixyCamConfig_get_sample_seq_access_info(void);
 #endif
-
 DDS_SEQUENCE(PixyCamConfigSeq, PixyCamConfig);
 
 NDDSUSERDllExport
@@ -357,17 +357,17 @@ RTIBool PixyCamConfig_copy(
 namespace rti { 
     namespace xcdr {
         template <>
-        struct type_code<ShapeType> {
+        struct type_code< ShapeType> {
             static const RTIXCdrTypeCode * get();
         };
 
         template <>
-        struct type_code<ShapeTypeExtended> {
+        struct type_code< ShapeTypeExtended> {
             static const RTIXCdrTypeCode * get();
         };
 
         template <>
-        struct type_code<PixyCamConfig> {
+        struct type_code< PixyCamConfig> {
             static const RTIXCdrTypeCode * get();
         };
 

@@ -2,10 +2,11 @@
 /*
 WARNING: THIS FILE IS AUTO-GENERATED. DO NOT MODIFY.
 
-This file was generated from ShapeType.idl using "rtiddsgen".
-The rtiddsgen tool is part of the RTI Connext distribution.
+This file was generated from ShapeType.idl
+using RTI Code Generator (rtiddsgen) version 4.2.0.
+The rtiddsgen tool is part of the RTI Connext DDS distribution.
 For more information, type 'rtiddsgen -help' at a command shell
-or consult the RTI Connext manual.
+or consult the Code Generator User's Manual.
 */
 
 #include <string.h>
@@ -92,16 +93,17 @@ Support functions:
 
 void ShapeFillKindPluginSupport_print_data(
     const ShapeFillKind *sample,
-    const char *description, int indent_level)
+    const char *description,
+    unsigned int indent_level)
 {
     if (description != NULL) {
         RTICdrType_printIndent(indent_level);
-        RTILog_debug("%s:\n", description);
+        RTILogParamString_printPlain("%s:\n", description);
     }
 
     if (sample == NULL) {
         RTICdrType_printIndent(indent_level+1);
-        RTILog_debug("NULL\n");
+        RTILogParamString_printPlain("NULL\n");
         return;
     }
 
@@ -126,12 +128,37 @@ ShapeTypePluginSupport_create_data_w_params(
 {
     ShapeType *sample = NULL;
 
-    sample = new (std::nothrow) ShapeType ;
+    if (alloc_params == NULL) {
+        return NULL;
+    } else if(!alloc_params->allocate_memory) {
+        RTICdrLog_exception(&RTI_CDR_LOG_TYPE_OBJECT_NOT_ASSIGNABLE_ss,
+        "alloc_params->allocate_memory","false");
+        return NULL;
+    }
+
+    sample = new (std::nothrow) ShapeType();
     if (sample == NULL) {
         return NULL;
     }
 
     if (!ShapeType_initialize_w_params(sample,alloc_params)) {
+        struct DDS_TypeDeallocationParams_t deallocParams =
+        DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
+        deallocParams.delete_pointers = alloc_params->allocate_pointers;
+        deallocParams.delete_optional_members = alloc_params->allocate_pointers;
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        allocation fails. But if the allocation fails then sample == null and
+        the method will return before reach this point.*/
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ShapeType_finalize_w_params(sample, &deallocParams);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ShapeType_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -143,13 +170,26 @@ ShapeTypePluginSupport_create_data_ex(RTIBool allocate_pointers)
 {
     ShapeType *sample = NULL;
 
-    sample = new (std::nothrow) ShapeType ;
+    sample = new (std::nothrow) ShapeType();
 
     if(sample == NULL) {
         return NULL;
     }
 
     if (!ShapeType_initialize_ex(sample,allocate_pointers, RTI_TRUE)) {
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        new fails. But if new fails then sample == null and the method will
+        return before reach this point. */
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ShapeType_finalize_ex(sample, RTI_TRUE);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ShapeType_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -170,7 +210,6 @@ ShapeTypePluginSupport_destroy_data_w_params(
     ShapeType_finalize_w_params(sample,dealloc_params);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -179,7 +218,6 @@ ShapeTypePluginSupport_destroy_data_ex(
     ShapeType_finalize_ex(sample,deallocate_pointers);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -208,13 +246,13 @@ ShapeTypePluginSupport_print_data(
     RTICdrType_printIndent(indent_level);
 
     if (desc != NULL) {
-        RTILog_debug("%s:\n", desc);
+        RTILogParamString_printPlain("%s:\n", desc);
     } else {
-        RTILog_debug("\n");
+        RTILogParamString_printPlain("\n");
     }
 
     if (sample == NULL) {
-        RTILog_debug("NULL\n");
+        RTILogParamString_printPlain("NULL\n");
         return;
     }
 
@@ -241,7 +279,7 @@ ShapeType *
 ShapeTypePluginSupport_create_key_ex(RTIBool allocate_pointers){
     ShapeType *key = NULL;
 
-    key = new (std::nothrow) ShapeTypeKeyHolder ;
+    key = new (std::nothrow) ShapeTypeKeyHolder();
 
     ShapeType_initialize_ex(key,allocate_pointers, RTI_TRUE);
 
@@ -261,7 +299,6 @@ ShapeTypePluginSupport_destroy_key_ex(
     ShapeType_finalize_ex(key,deallocate_pointers);
 
     delete  key;
-    key=NULL;
 }
 
 void 
@@ -285,9 +322,9 @@ ShapeTypePlugin_on_participant_attached(
     RTICdrTypeCode *type_code)
 {
     struct RTIXCdrInterpreterPrograms *programs = NULL;
-    struct PRESTypePluginDefaultParticipantData *pd = NULL;
     struct RTIXCdrInterpreterProgramsGenProperty programProperty =
     RTIXCdrInterpreterProgramsGenProperty_INITIALIZER;
+    struct PRESTypePluginDefaultParticipantData *pd = NULL;
 
     if (registration_data) {} /* To avoid warnings */
     if (participant_info) {} /* To avoid warnings */
@@ -303,6 +340,7 @@ ShapeTypePlugin_on_participant_attached(
     programProperty.resolveAlias = RTI_XCDR_TRUE;
     programProperty.inlineStruct = RTI_XCDR_TRUE;
     programProperty.optimizeEnum = RTI_XCDR_TRUE;
+    programProperty.unboundedSize = RTIXCdrLong_MAX;
 
     programs = DDS_TypeCodeFactory_assert_programs_in_global_list(
         DDS_TypeCodeFactory_get_instance(),
@@ -429,6 +467,16 @@ ShapeTypePlugin_return_sample(
         endpoint_data, sample, handle);
 }
 
+void ShapeTypePlugin_finalize_optional_members(
+    PRESTypePluginEndpointData endpoint_data,
+    ShapeType* sample,
+    RTIBool deletePointers)
+{
+    RTIOsapiUtility_unusedParameter(endpoint_data);
+    ShapeType_finalize_optional_members(
+        sample, deletePointers);
+}
+
 RTIBool 
 ShapeTypePlugin_copy_sample(
     PRESTypePluginEndpointData endpoint_data,
@@ -461,7 +509,7 @@ ShapeTypePlugin_serialize_to_cdr_buffer_ex(
     struct PRESTypePluginDefaultEndpointData epd;
     RTIBool result;
     struct PRESTypePluginDefaultParticipantData pd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePlugin plugin;
 
@@ -470,7 +518,7 @@ ShapeTypePlugin_serialize_to_cdr_buffer_ex(
     }
 
     RTIOsapiMemory_zero(&epd, sizeof(struct PRESTypePluginDefaultEndpointData));
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -523,7 +571,7 @@ ShapeTypePlugin_serialize_to_cdr_buffer_ex(
         RTI_TRUE,
         NULL);
 
-    *length = RTICdrStream_getCurrentPositionOffset(&stream);
+    *length = (unsigned int) RTICdrStream_getCurrentPositionOffset(&stream);
     return result;
 }
 
@@ -548,12 +596,12 @@ ShapeTypePlugin_deserialize_from_cdr_buffer(
 {
     struct RTICdrStream stream;
     struct PRESTypePluginDefaultEndpointData epd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePluginDefaultParticipantData pd;
     struct PRESTypePlugin plugin;
 
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -565,7 +613,8 @@ ShapeTypePlugin_deserialize_from_cdr_buffer(
     }
 
     epd._assignabilityProperty.acceptUnknownEnumValue = RTI_XCDR_TRUE;
-    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = RTI_XCDR_TRUE;
+    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = 
+    RTI_XCDR_ACCEPT_UNKNOWN_DISCRIMINATOR_AND_SELECT_DEFAULT;
 
     RTICdrStream_init(&stream);
     RTICdrStream_set(&stream, (char *)buffer, length);
@@ -577,11 +626,11 @@ ShapeTypePlugin_deserialize_from_cdr_buffer(
         NULL);
 }
 
-#ifndef NDDS_STANDALONE_TYPE
+#if !defined(NDDS_STANDALONE_TYPE)
 DDS_ReturnCode_t
 ShapeTypePlugin_data_to_string(
     const ShapeType *sample,
-    char *str,
+    char *_str,
     DDS_UnsignedLong *str_size, 
     const struct DDS_PrintFormatProperty *property)
 {
@@ -647,7 +696,7 @@ ShapeTypePlugin_data_to_string(
 
     retCode = DDS_DynamicDataFormatter_to_string_w_format(
         data, 
-        str,
+        _str,
         str_size, 
         &printFormat);
     if (retCode != DDS_RETCODE_OK) {
@@ -703,15 +752,18 @@ RTIBool ShapeTypePlugin_deserialize_key(
 {
     RTIBool result;
     if (drop_sample) {} /* To avoid warnings */
-    stream->_xTypesState.unassignable = RTI_FALSE;
+    /*  Depending on the type and the flags used in rtiddsgen, coverity may detect
+    that sample is always null. Since the case is very dependant on
+    the IDL/XML and the configuration we keep the check for safety.
+    */
     result= PRESTypePlugin_interpretedDeserializeKey(
-        endpoint_data, (sample != NULL)?*sample:NULL, stream,
-        deserialize_encapsulation, deserialize_key, endpoint_plugin_qos);
-    if (result) {
-        if (stream->_xTypesState.unassignable) {
-            result = RTI_FALSE;
-        }
-    }
+        endpoint_data,
+        /* coverity[check_after_deref] */
+        (sample != NULL) ? *sample : NULL,
+        stream,
+        deserialize_encapsulation,
+        deserialize_key,
+        endpoint_plugin_qos);
     return result;    
 
 }
@@ -763,8 +815,11 @@ ShapeTypePlugin_instance_to_key(
     if (endpoint_data) {} /* To avoid warnings */   
 
     if (!RTICdrType_copyStringEx (
-        &dst->color, src->color, 
-        (128) + 1, RTI_FALSE)){
+        &dst->color
+        ,
+        src->color, 
+        (128L) + 1,
+        RTI_FALSE)){
         return RTI_FALSE;
     }
     return RTI_TRUE;
@@ -778,110 +833,13 @@ ShapeTypePlugin_key_to_instance(
 {
     if (endpoint_data) {} /* To avoid warnings */   
     if (!RTICdrType_copyStringEx (
-        &dst->color, src->color, 
-        (128) + 1, RTI_FALSE)){
+        &dst->color
+        ,
+        src->color, 
+        (128L) + 1,
+        RTI_FALSE)){
         return RTI_FALSE;
     }
-    return RTI_TRUE;
-}
-
-RTIBool 
-ShapeTypePlugin_instance_to_keyhash(
-    PRESTypePluginEndpointData endpoint_data,
-    DDS_KeyHash_t *keyhash,
-    const ShapeType *instance,
-    RTIEncapsulationId encapsulationId)
-{
-    struct RTICdrStream * md5Stream = NULL;
-    struct RTICdrStreamState cdrState;
-    char * buffer = NULL;
-    RTIXCdrBoolean iCdrv2;
-
-    iCdrv2 = RTIXCdrEncapsulationId_isCdrV2(encapsulationId);
-    RTICdrStreamState_init(&cdrState);
-    md5Stream = PRESTypePluginDefaultEndpointData_getMD5Stream(endpoint_data);
-
-    if (md5Stream == NULL) {
-        return RTI_FALSE;
-    }
-
-    RTICdrStream_resetPosition(md5Stream);
-    RTICdrStream_setDirtyBit(md5Stream, RTI_TRUE);
-
-    if (!PRESTypePlugin_interpretedSerializeKeyForKeyhash(
-        endpoint_data,
-        instance,
-        md5Stream,
-        iCdrv2?
-        RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-        RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-        NULL)) 
-    {
-        int size;
-
-        RTICdrStream_pushState(md5Stream, &cdrState, -1);
-
-        size = (int)PRESTypePlugin_interpretedGetSerializedSampleSize(
-            endpoint_data,
-            RTI_FALSE,
-            iCdrv2?
-            RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-            RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-            0,
-            instance);
-
-        if (size <= RTICdrStream_getBufferLength(md5Stream)) {
-            RTICdrStream_popState(md5Stream, &cdrState);        
-            return RTI_FALSE;
-        }   
-
-        RTIOsapiHeap_allocateBuffer(&buffer,size,0);
-
-        if (buffer == NULL) {
-            RTICdrStream_popState(md5Stream, &cdrState);
-            return RTI_FALSE;
-        }
-
-        RTICdrStream_set(md5Stream, buffer, size);
-        RTIOsapiMemory_zero(
-            RTICdrStream_getBuffer(md5Stream),
-            RTICdrStream_getBufferLength(md5Stream));
-        RTICdrStream_resetPosition(md5Stream);
-        RTICdrStream_setDirtyBit(md5Stream, RTI_TRUE);
-        if (!PRESTypePlugin_interpretedSerializeKeyForKeyhash(
-            endpoint_data,
-            instance,
-            md5Stream, 
-            iCdrv2?
-            RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-            RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-            NULL)) 
-        {
-            RTICdrStream_popState(md5Stream, &cdrState);
-            RTIOsapiHeap_freeBuffer(buffer);
-            return RTI_FALSE;
-        }        
-    }   
-
-    if (PRESTypePluginDefaultEndpointData_getMaxSizeSerializedKey(endpoint_data, iCdrv2) > 
-    (unsigned int)(MIG_RTPS_KEY_HASH_MAX_LENGTH) ||
-    PRESTypePluginDefaultEndpointData_forceMD5KeyHash(endpoint_data)) {
-        RTICdrStream_computeMD5(md5Stream, keyhash->value);
-    } else {
-        RTIOsapiMemory_zero(keyhash->value,MIG_RTPS_KEY_HASH_MAX_LENGTH);
-        RTIOsapiMemory_copy(
-            keyhash->value, 
-            RTICdrStream_getBuffer(md5Stream), 
-            RTICdrStream_getCurrentPositionOffset(md5Stream));
-    }
-
-    keyhash->length = MIG_RTPS_KEY_HASH_MAX_LENGTH;
-
-    if (buffer != NULL) {
-        RTICdrStream_popState(md5Stream, &cdrState);
-        RTIOsapiHeap_freeBuffer(buffer);
-    }
-
     return RTI_TRUE;
 }
 
@@ -909,7 +867,7 @@ ShapeTypePlugin_serialized_sample_to_keyhash(
         endpoint_plugin_qos)) {
         return RTI_FALSE;
     }
-    if (!ShapeTypePlugin_instance_to_keyhash(
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
         endpoint_data, 
         keyhash, 
         sample,
@@ -919,9 +877,9 @@ ShapeTypePlugin_serialized_sample_to_keyhash(
     return RTI_TRUE;
 }
 
-struct RTIXCdrInterpreterPrograms *ShapeTypePlugin_get_programs()
+struct RTIXCdrInterpreterPrograms * ShapeTypePlugin_get_programs(void)
 {
-    return rti::xcdr::get_cdr_serialization_programs<
+    return ::rti::xcdr::get_cdr_serialization_programs<
     ShapeType, 
     true, true, true>();
 }
@@ -969,7 +927,7 @@ struct PRESTypePlugin *ShapeTypePlugin_new(void)
     ShapeTypePlugin_destroy_sample;
     plugin->finalizeOptionalMembersFnc =
     (PRESTypePluginFinalizeOptionalMembersFunction)
-    ShapeType_finalize_optional_members;
+    ShapeTypePlugin_finalize_optional_members;
 
     plugin->serializeFnc = 
     (PRESTypePluginSerializeFunction) PRESTypePlugin_interpretedSerialize;
@@ -1007,7 +965,7 @@ struct PRESTypePlugin *ShapeTypePlugin_new(void)
 
     plugin-> instanceToKeyHashFnc = 
     (PRESTypePluginInstanceToKeyHashFunction)
-    ShapeTypePlugin_instance_to_keyhash;
+    PRESTypePlugin_interpretedInstanceToKeyHash;
     plugin->serializedSampleToKeyHashFnc = 
     (PRESTypePluginSerializedSampleToKeyHashFunction)
     ShapeTypePlugin_serialized_sample_to_keyhash;
@@ -1041,7 +999,7 @@ struct PRESTypePlugin *ShapeTypePlugin_new(void)
     (PRESTypePluginReturnBufferFunction)
     ShapeTypePlugin_return_buffer;
     plugin->getBufferWithParams = NULL;
-    plugin->returnBufferWithParams = NULL;  
+    plugin->returnBufferWithParams = NULL;
     plugin->getSerializedSampleSizeFnc =
     (PRESTypePluginGetSerializedSampleSizeFunction)
     PRESTypePlugin_interpretedGetSerializedSampleSize;
@@ -1077,12 +1035,37 @@ ShapeTypeExtendedPluginSupport_create_data_w_params(
 {
     ShapeTypeExtended *sample = NULL;
 
-    sample = new (std::nothrow) ShapeTypeExtended ;
+    if (alloc_params == NULL) {
+        return NULL;
+    } else if(!alloc_params->allocate_memory) {
+        RTICdrLog_exception(&RTI_CDR_LOG_TYPE_OBJECT_NOT_ASSIGNABLE_ss,
+        "alloc_params->allocate_memory","false");
+        return NULL;
+    }
+
+    sample = new (std::nothrow) ShapeTypeExtended();
     if (sample == NULL) {
         return NULL;
     }
 
     if (!ShapeTypeExtended_initialize_w_params(sample,alloc_params)) {
+        struct DDS_TypeDeallocationParams_t deallocParams =
+        DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
+        deallocParams.delete_pointers = alloc_params->allocate_pointers;
+        deallocParams.delete_optional_members = alloc_params->allocate_pointers;
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        allocation fails. But if the allocation fails then sample == null and
+        the method will return before reach this point.*/
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ShapeTypeExtended_finalize_w_params(sample, &deallocParams);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ShapeTypeExtended_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -1094,13 +1077,26 @@ ShapeTypeExtendedPluginSupport_create_data_ex(RTIBool allocate_pointers)
 {
     ShapeTypeExtended *sample = NULL;
 
-    sample = new (std::nothrow) ShapeTypeExtended ;
+    sample = new (std::nothrow) ShapeTypeExtended();
 
     if(sample == NULL) {
         return NULL;
     }
 
     if (!ShapeTypeExtended_initialize_ex(sample,allocate_pointers, RTI_TRUE)) {
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        new fails. But if new fails then sample == null and the method will
+        return before reach this point. */
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        ShapeTypeExtended_finalize_ex(sample, RTI_TRUE);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "ShapeTypeExtended_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -1121,7 +1117,6 @@ ShapeTypeExtendedPluginSupport_destroy_data_w_params(
     ShapeTypeExtended_finalize_w_params(sample,dealloc_params);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -1130,7 +1125,6 @@ ShapeTypeExtendedPluginSupport_destroy_data_ex(
     ShapeTypeExtended_finalize_ex(sample,deallocate_pointers);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -1159,13 +1153,13 @@ ShapeTypeExtendedPluginSupport_print_data(
     RTICdrType_printIndent(indent_level);
 
     if (desc != NULL) {
-        RTILog_debug("%s:\n", desc);
+        RTILogParamString_printPlain("%s:\n", desc);
     } else {
-        RTILog_debug("\n");
+        RTILogParamString_printPlain("\n");
     }
 
     if (sample == NULL) {
-        RTILog_debug("NULL\n");
+        RTILogParamString_printPlain("NULL\n");
         return;
     }
 
@@ -1183,7 +1177,7 @@ ShapeTypeExtended *
 ShapeTypeExtendedPluginSupport_create_key_ex(RTIBool allocate_pointers){
     ShapeTypeExtended *key = NULL;
 
-    key = new (std::nothrow) ShapeTypeExtendedKeyHolder ;
+    key = new (std::nothrow) ShapeTypeExtendedKeyHolder();
 
     ShapeTypeExtended_initialize_ex(key,allocate_pointers, RTI_TRUE);
 
@@ -1203,7 +1197,6 @@ ShapeTypeExtendedPluginSupport_destroy_key_ex(
     ShapeTypeExtended_finalize_ex(key,deallocate_pointers);
 
     delete  key;
-    key=NULL;
 }
 
 void 
@@ -1227,9 +1220,9 @@ ShapeTypeExtendedPlugin_on_participant_attached(
     RTICdrTypeCode *type_code)
 {
     struct RTIXCdrInterpreterPrograms *programs = NULL;
-    struct PRESTypePluginDefaultParticipantData *pd = NULL;
     struct RTIXCdrInterpreterProgramsGenProperty programProperty =
     RTIXCdrInterpreterProgramsGenProperty_INITIALIZER;
+    struct PRESTypePluginDefaultParticipantData *pd = NULL;
 
     if (registration_data) {} /* To avoid warnings */
     if (participant_info) {} /* To avoid warnings */
@@ -1245,6 +1238,7 @@ ShapeTypeExtendedPlugin_on_participant_attached(
     programProperty.resolveAlias = RTI_XCDR_TRUE;
     programProperty.inlineStruct = RTI_XCDR_TRUE;
     programProperty.optimizeEnum = RTI_XCDR_TRUE;
+    programProperty.unboundedSize = RTIXCdrLong_MAX;
 
     programs = DDS_TypeCodeFactory_assert_programs_in_global_list(
         DDS_TypeCodeFactory_get_instance(),
@@ -1371,6 +1365,16 @@ ShapeTypeExtendedPlugin_return_sample(
         endpoint_data, sample, handle);
 }
 
+void ShapeTypeExtendedPlugin_finalize_optional_members(
+    PRESTypePluginEndpointData endpoint_data,
+    ShapeTypeExtended* sample,
+    RTIBool deletePointers)
+{
+    RTIOsapiUtility_unusedParameter(endpoint_data);
+    ShapeTypeExtended_finalize_optional_members(
+        sample, deletePointers);
+}
+
 RTIBool 
 ShapeTypeExtendedPlugin_copy_sample(
     PRESTypePluginEndpointData endpoint_data,
@@ -1403,7 +1407,7 @@ ShapeTypeExtendedPlugin_serialize_to_cdr_buffer_ex(
     struct PRESTypePluginDefaultEndpointData epd;
     RTIBool result;
     struct PRESTypePluginDefaultParticipantData pd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePlugin plugin;
 
@@ -1412,7 +1416,7 @@ ShapeTypeExtendedPlugin_serialize_to_cdr_buffer_ex(
     }
 
     RTIOsapiMemory_zero(&epd, sizeof(struct PRESTypePluginDefaultEndpointData));
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -1465,7 +1469,7 @@ ShapeTypeExtendedPlugin_serialize_to_cdr_buffer_ex(
         RTI_TRUE,
         NULL);
 
-    *length = RTICdrStream_getCurrentPositionOffset(&stream);
+    *length = (unsigned int) RTICdrStream_getCurrentPositionOffset(&stream);
     return result;
 }
 
@@ -1490,12 +1494,12 @@ ShapeTypeExtendedPlugin_deserialize_from_cdr_buffer(
 {
     struct RTICdrStream stream;
     struct PRESTypePluginDefaultEndpointData epd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePluginDefaultParticipantData pd;
     struct PRESTypePlugin plugin;
 
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -1507,7 +1511,8 @@ ShapeTypeExtendedPlugin_deserialize_from_cdr_buffer(
     }
 
     epd._assignabilityProperty.acceptUnknownEnumValue = RTI_XCDR_TRUE;
-    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = RTI_XCDR_TRUE;
+    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = 
+    RTI_XCDR_ACCEPT_UNKNOWN_DISCRIMINATOR_AND_SELECT_DEFAULT;
 
     RTICdrStream_init(&stream);
     RTICdrStream_set(&stream, (char *)buffer, length);
@@ -1519,11 +1524,11 @@ ShapeTypeExtendedPlugin_deserialize_from_cdr_buffer(
         NULL);
 }
 
-#ifndef NDDS_STANDALONE_TYPE
+#if !defined(NDDS_STANDALONE_TYPE)
 DDS_ReturnCode_t
 ShapeTypeExtendedPlugin_data_to_string(
     const ShapeTypeExtended *sample,
-    char *str,
+    char *_str,
     DDS_UnsignedLong *str_size, 
     const struct DDS_PrintFormatProperty *property)
 {
@@ -1589,7 +1594,7 @@ ShapeTypeExtendedPlugin_data_to_string(
 
     retCode = DDS_DynamicDataFormatter_to_string_w_format(
         data, 
-        str,
+        _str,
         str_size, 
         &printFormat);
     if (retCode != DDS_RETCODE_OK) {
@@ -1645,15 +1650,18 @@ RTIBool ShapeTypeExtendedPlugin_deserialize_key(
 {
     RTIBool result;
     if (drop_sample) {} /* To avoid warnings */
-    stream->_xTypesState.unassignable = RTI_FALSE;
+    /*  Depending on the type and the flags used in rtiddsgen, coverity may detect
+    that sample is always null. Since the case is very dependant on
+    the IDL/XML and the configuration we keep the check for safety.
+    */
     result= PRESTypePlugin_interpretedDeserializeKey(
-        endpoint_data, (sample != NULL)?*sample:NULL, stream,
-        deserialize_encapsulation, deserialize_key, endpoint_plugin_qos);
-    if (result) {
-        if (stream->_xTypesState.unassignable) {
-            result = RTI_FALSE;
-        }
-    }
+        endpoint_data,
+        /* coverity[check_after_deref] */
+        (sample != NULL) ? *sample : NULL,
+        stream,
+        deserialize_encapsulation,
+        deserialize_key,
+        endpoint_plugin_qos);
     return result;    
 
 }
@@ -1722,106 +1730,6 @@ ShapeTypeExtendedPlugin_key_to_instance(
 }
 
 RTIBool 
-ShapeTypeExtendedPlugin_instance_to_keyhash(
-    PRESTypePluginEndpointData endpoint_data,
-    DDS_KeyHash_t *keyhash,
-    const ShapeTypeExtended *instance,
-    RTIEncapsulationId encapsulationId)
-{
-    struct RTICdrStream * md5Stream = NULL;
-    struct RTICdrStreamState cdrState;
-    char * buffer = NULL;
-    RTIXCdrBoolean iCdrv2;
-
-    iCdrv2 = RTIXCdrEncapsulationId_isCdrV2(encapsulationId);
-    RTICdrStreamState_init(&cdrState);
-    md5Stream = PRESTypePluginDefaultEndpointData_getMD5Stream(endpoint_data);
-
-    if (md5Stream == NULL) {
-        return RTI_FALSE;
-    }
-
-    RTICdrStream_resetPosition(md5Stream);
-    RTICdrStream_setDirtyBit(md5Stream, RTI_TRUE);
-
-    if (!PRESTypePlugin_interpretedSerializeKeyForKeyhash(
-        endpoint_data,
-        instance,
-        md5Stream,
-        iCdrv2?
-        RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-        RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-        NULL)) 
-    {
-        int size;
-
-        RTICdrStream_pushState(md5Stream, &cdrState, -1);
-
-        size = (int)PRESTypePlugin_interpretedGetSerializedSampleSize(
-            endpoint_data,
-            RTI_FALSE,
-            iCdrv2?
-            RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-            RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-            0,
-            instance);
-
-        if (size <= RTICdrStream_getBufferLength(md5Stream)) {
-            RTICdrStream_popState(md5Stream, &cdrState);        
-            return RTI_FALSE;
-        }   
-
-        RTIOsapiHeap_allocateBuffer(&buffer,size,0);
-
-        if (buffer == NULL) {
-            RTICdrStream_popState(md5Stream, &cdrState);
-            return RTI_FALSE;
-        }
-
-        RTICdrStream_set(md5Stream, buffer, size);
-        RTIOsapiMemory_zero(
-            RTICdrStream_getBuffer(md5Stream),
-            RTICdrStream_getBufferLength(md5Stream));
-        RTICdrStream_resetPosition(md5Stream);
-        RTICdrStream_setDirtyBit(md5Stream, RTI_TRUE);
-        if (!PRESTypePlugin_interpretedSerializeKeyForKeyhash(
-            endpoint_data,
-            instance,
-            md5Stream, 
-            iCdrv2?
-            RTI_CDR_ENCAPSULATION_ID_CDR2_BE:
-            RTI_CDR_ENCAPSULATION_ID_CDR_BE,
-            NULL)) 
-        {
-            RTICdrStream_popState(md5Stream, &cdrState);
-            RTIOsapiHeap_freeBuffer(buffer);
-            return RTI_FALSE;
-        }        
-    }   
-
-    if (PRESTypePluginDefaultEndpointData_getMaxSizeSerializedKey(endpoint_data, iCdrv2) > 
-    (unsigned int)(MIG_RTPS_KEY_HASH_MAX_LENGTH) ||
-    PRESTypePluginDefaultEndpointData_forceMD5KeyHash(endpoint_data)) {
-        RTICdrStream_computeMD5(md5Stream, keyhash->value);
-    } else {
-        RTIOsapiMemory_zero(keyhash->value,MIG_RTPS_KEY_HASH_MAX_LENGTH);
-        RTIOsapiMemory_copy(
-            keyhash->value, 
-            RTICdrStream_getBuffer(md5Stream), 
-            RTICdrStream_getCurrentPositionOffset(md5Stream));
-    }
-
-    keyhash->length = MIG_RTPS_KEY_HASH_MAX_LENGTH;
-
-    if (buffer != NULL) {
-        RTICdrStream_popState(md5Stream, &cdrState);
-        RTIOsapiHeap_freeBuffer(buffer);
-    }
-
-    return RTI_TRUE;
-}
-
-RTIBool 
 ShapeTypeExtendedPlugin_serialized_sample_to_keyhash(
     PRESTypePluginEndpointData endpoint_data,
     struct RTICdrStream *stream, 
@@ -1845,7 +1753,7 @@ ShapeTypeExtendedPlugin_serialized_sample_to_keyhash(
         endpoint_plugin_qos)) {
         return RTI_FALSE;
     }
-    if (!ShapeTypeExtendedPlugin_instance_to_keyhash(
+    if (!PRESTypePlugin_interpretedInstanceToKeyHash(
         endpoint_data, 
         keyhash, 
         sample,
@@ -1855,9 +1763,9 @@ ShapeTypeExtendedPlugin_serialized_sample_to_keyhash(
     return RTI_TRUE;
 }
 
-struct RTIXCdrInterpreterPrograms *ShapeTypeExtendedPlugin_get_programs()
+struct RTIXCdrInterpreterPrograms * ShapeTypeExtendedPlugin_get_programs(void)
 {
-    return rti::xcdr::get_cdr_serialization_programs<
+    return ::rti::xcdr::get_cdr_serialization_programs<
     ShapeTypeExtended, 
     true, true, true>();
 }
@@ -1905,7 +1813,7 @@ struct PRESTypePlugin *ShapeTypeExtendedPlugin_new(void)
     ShapeTypeExtendedPlugin_destroy_sample;
     plugin->finalizeOptionalMembersFnc =
     (PRESTypePluginFinalizeOptionalMembersFunction)
-    ShapeTypeExtended_finalize_optional_members;
+    ShapeTypeExtendedPlugin_finalize_optional_members;
 
     plugin->serializeFnc = 
     (PRESTypePluginSerializeFunction) PRESTypePlugin_interpretedSerialize;
@@ -1943,7 +1851,7 @@ struct PRESTypePlugin *ShapeTypeExtendedPlugin_new(void)
 
     plugin-> instanceToKeyHashFnc = 
     (PRESTypePluginInstanceToKeyHashFunction)
-    ShapeTypeExtendedPlugin_instance_to_keyhash;
+    PRESTypePlugin_interpretedInstanceToKeyHash;
     plugin->serializedSampleToKeyHashFnc = 
     (PRESTypePluginSerializedSampleToKeyHashFunction)
     ShapeTypeExtendedPlugin_serialized_sample_to_keyhash;
@@ -1977,7 +1885,7 @@ struct PRESTypePlugin *ShapeTypeExtendedPlugin_new(void)
     (PRESTypePluginReturnBufferFunction)
     ShapeTypeExtendedPlugin_return_buffer;
     plugin->getBufferWithParams = NULL;
-    plugin->returnBufferWithParams = NULL;  
+    plugin->returnBufferWithParams = NULL;
     plugin->getSerializedSampleSizeFnc =
     (PRESTypePluginGetSerializedSampleSizeFunction)
     PRESTypePlugin_interpretedGetSerializedSampleSize;
@@ -2013,12 +1921,37 @@ PixyCamConfigPluginSupport_create_data_w_params(
 {
     PixyCamConfig *sample = NULL;
 
-    sample = new (std::nothrow) PixyCamConfig ;
+    if (alloc_params == NULL) {
+        return NULL;
+    } else if(!alloc_params->allocate_memory) {
+        RTICdrLog_exception(&RTI_CDR_LOG_TYPE_OBJECT_NOT_ASSIGNABLE_ss,
+        "alloc_params->allocate_memory","false");
+        return NULL;
+    }
+
+    sample = new (std::nothrow) PixyCamConfig();
     if (sample == NULL) {
         return NULL;
     }
 
     if (!PixyCamConfig_initialize_w_params(sample,alloc_params)) {
+        struct DDS_TypeDeallocationParams_t deallocParams =
+        DDS_TYPE_DEALLOCATION_PARAMS_DEFAULT;
+        deallocParams.delete_pointers = alloc_params->allocate_pointers;
+        deallocParams.delete_optional_members = alloc_params->allocate_pointers;
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        allocation fails. But if the allocation fails then sample == null and
+        the method will return before reach this point.*/
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        PixyCamConfig_finalize_w_params(sample, &deallocParams);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "PixyCamConfig_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -2030,13 +1963,26 @@ PixyCamConfigPluginSupport_create_data_ex(RTIBool allocate_pointers)
 {
     PixyCamConfig *sample = NULL;
 
-    sample = new (std::nothrow) PixyCamConfig ;
+    sample = new (std::nothrow) PixyCamConfig();
 
     if(sample == NULL) {
         return NULL;
     }
 
     if (!PixyCamConfig_initialize_ex(sample,allocate_pointers, RTI_TRUE)) {
+        /* Coverity reports a possible uninit_use_in_call that will happen if the
+        new fails. But if new fails then sample == null and the method will
+        return before reach this point. */
+        /* Coverity reports a possible overwrite_var on the members of the sample.
+        It is a false positive since all the pointers are freed before assigning
+        null to them. */
+        /* coverity[uninit_use_in_call : FALSE] */
+        /* coverity[overwrite_var : FALSE] */
+        PixyCamConfig_finalize_ex(sample, RTI_TRUE);
+        /* Coverity reports a possible leaked_storage on the sample members when 
+        freeing sample. It is a false positive since all the members' memory 
+        is freed in the call "PixyCamConfig_finalize_ex" */
+        /* coverity[leaked_storage : FALSE] */
         delete  sample;
         sample=NULL;
     }
@@ -2057,7 +2003,6 @@ PixyCamConfigPluginSupport_destroy_data_w_params(
     PixyCamConfig_finalize_w_params(sample,dealloc_params);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -2066,7 +2011,6 @@ PixyCamConfigPluginSupport_destroy_data_ex(
     PixyCamConfig_finalize_ex(sample,deallocate_pointers);
 
     delete  sample;
-    sample=NULL;
 }
 
 void 
@@ -2095,18 +2039,18 @@ PixyCamConfigPluginSupport_print_data(
     RTICdrType_printIndent(indent_level);
 
     if (desc != NULL) {
-        RTILog_debug("%s:\n", desc);
+        RTILogParamString_printPlain("%s:\n", desc);
     } else {
-        RTILog_debug("\n");
+        RTILogParamString_printPlain("\n");
     }
 
     if (sample == NULL) {
-        RTILog_debug("NULL\n");
+        RTILogParamString_printPlain("NULL\n");
         return;
     }
 
     RTICdrType_printArray(
-        sample->profileEnabled, (7), RTI_CDR_BOOLEAN_SIZE,
+        sample->profileEnabled, (7L), RTI_CDR_BOOLEAN_SIZE,
         (RTICdrTypePrintFunction)RTICdrType_printBoolean, 
         "profileEnabled", indent_level + 1);        
 
@@ -2125,9 +2069,9 @@ PixyCamConfigPlugin_on_participant_attached(
     RTICdrTypeCode *type_code)
 {
     struct RTIXCdrInterpreterPrograms *programs = NULL;
-    struct PRESTypePluginDefaultParticipantData *pd = NULL;
     struct RTIXCdrInterpreterProgramsGenProperty programProperty =
     RTIXCdrInterpreterProgramsGenProperty_INITIALIZER;
+    struct PRESTypePluginDefaultParticipantData *pd = NULL;
 
     if (registration_data) {} /* To avoid warnings */
     if (participant_info) {} /* To avoid warnings */
@@ -2143,6 +2087,7 @@ PixyCamConfigPlugin_on_participant_attached(
     programProperty.resolveAlias = RTI_XCDR_TRUE;
     programProperty.inlineStruct = RTI_XCDR_TRUE;
     programProperty.optimizeEnum = RTI_XCDR_TRUE;
+    programProperty.unboundedSize = RTIXCdrLong_MAX;
 
     programs = DDS_TypeCodeFactory_assert_programs_in_global_list(
         DDS_TypeCodeFactory_get_instance(),
@@ -2247,6 +2192,16 @@ PixyCamConfigPlugin_return_sample(
         endpoint_data, sample, handle);
 }
 
+void PixyCamConfigPlugin_finalize_optional_members(
+    PRESTypePluginEndpointData endpoint_data,
+    PixyCamConfig* sample,
+    RTIBool deletePointers)
+{
+    RTIOsapiUtility_unusedParameter(endpoint_data);
+    PixyCamConfig_finalize_optional_members(
+        sample, deletePointers);
+}
+
 RTIBool 
 PixyCamConfigPlugin_copy_sample(
     PRESTypePluginEndpointData endpoint_data,
@@ -2279,7 +2234,7 @@ PixyCamConfigPlugin_serialize_to_cdr_buffer_ex(
     struct PRESTypePluginDefaultEndpointData epd;
     RTIBool result;
     struct PRESTypePluginDefaultParticipantData pd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePlugin plugin;
 
@@ -2288,7 +2243,7 @@ PixyCamConfigPlugin_serialize_to_cdr_buffer_ex(
     }
 
     RTIOsapiMemory_zero(&epd, sizeof(struct PRESTypePluginDefaultEndpointData));
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -2341,7 +2296,7 @@ PixyCamConfigPlugin_serialize_to_cdr_buffer_ex(
         RTI_TRUE,
         NULL);
 
-    *length = RTICdrStream_getCurrentPositionOffset(&stream);
+    *length = (unsigned int) RTICdrStream_getCurrentPositionOffset(&stream);
     return result;
 }
 
@@ -2366,12 +2321,12 @@ PixyCamConfigPlugin_deserialize_from_cdr_buffer(
 {
     struct RTICdrStream stream;
     struct PRESTypePluginDefaultEndpointData epd;
-    struct RTIXCdrTypePluginProgramContext defaultProgramConext =
+    struct RTIXCdrTypePluginProgramContext defaultProgramContext =
     RTIXCdrTypePluginProgramContext_INTIALIZER;
     struct PRESTypePluginDefaultParticipantData pd;
     struct PRESTypePlugin plugin;
 
-    epd.programContext = defaultProgramConext;  
+    epd.programContext = defaultProgramContext;
     epd._participantData = &pd;
     epd.typePlugin = &plugin;
     epd.programContext.endpointPluginData = &epd;
@@ -2383,7 +2338,8 @@ PixyCamConfigPlugin_deserialize_from_cdr_buffer(
     }
 
     epd._assignabilityProperty.acceptUnknownEnumValue = RTI_XCDR_TRUE;
-    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = RTI_XCDR_TRUE;
+    epd._assignabilityProperty.acceptUnknownUnionDiscriminator = 
+    RTI_XCDR_ACCEPT_UNKNOWN_DISCRIMINATOR_AND_SELECT_DEFAULT;
 
     RTICdrStream_init(&stream);
     RTICdrStream_set(&stream, (char *)buffer, length);
@@ -2395,11 +2351,11 @@ PixyCamConfigPlugin_deserialize_from_cdr_buffer(
         NULL);
 }
 
-#ifndef NDDS_STANDALONE_TYPE
+#if !defined(NDDS_STANDALONE_TYPE)
 DDS_ReturnCode_t
 PixyCamConfigPlugin_data_to_string(
     const PixyCamConfig *sample,
-    char *str,
+    char *_str,
     DDS_UnsignedLong *str_size, 
     const struct DDS_PrintFormatProperty *property)
 {
@@ -2465,7 +2421,7 @@ PixyCamConfigPlugin_data_to_string(
 
     retCode = DDS_DynamicDataFormatter_to_string_w_format(
         data, 
-        str,
+        _str,
         str_size, 
         &printFormat);
     if (retCode != DDS_RETCODE_OK) {
@@ -2521,15 +2477,18 @@ RTIBool PixyCamConfigPlugin_deserialize_key(
 {
     RTIBool result;
     if (drop_sample) {} /* To avoid warnings */
-    stream->_xTypesState.unassignable = RTI_FALSE;
+    /*  Depending on the type and the flags used in rtiddsgen, coverity may detect
+    that sample is always null. Since the case is very dependant on
+    the IDL/XML and the configuration we keep the check for safety.
+    */
     result= PRESTypePlugin_interpretedDeserializeKey(
-        endpoint_data, (sample != NULL)?*sample:NULL, stream,
-        deserialize_encapsulation, deserialize_key, endpoint_plugin_qos);
-    if (result) {
-        if (stream->_xTypesState.unassignable) {
-            result = RTI_FALSE;
-        }
-    }
+        endpoint_data,
+        /* coverity[check_after_deref] */
+        (sample != NULL) ? *sample : NULL,
+        stream,
+        deserialize_encapsulation,
+        deserialize_key,
+        endpoint_plugin_qos);
     return result;    
 
 }
@@ -2572,9 +2531,9 @@ PixyCamConfigPlugin_get_serialized_key_max_size_for_keyhash(
     return size;
 }
 
-struct RTIXCdrInterpreterPrograms *PixyCamConfigPlugin_get_programs()
+struct RTIXCdrInterpreterPrograms * PixyCamConfigPlugin_get_programs(void)
 {
-    return rti::xcdr::get_cdr_serialization_programs<
+    return ::rti::xcdr::get_cdr_serialization_programs<
     PixyCamConfig, 
     true, true, true>();
 }
@@ -2622,7 +2581,7 @@ struct PRESTypePlugin *PixyCamConfigPlugin_new(void)
     PixyCamConfigPlugin_destroy_sample;
     plugin->finalizeOptionalMembersFnc =
     (PRESTypePluginFinalizeOptionalMembersFunction)
-    PixyCamConfig_finalize_optional_members;
+    PixyCamConfigPlugin_finalize_optional_members;
 
     plugin->serializeFnc = 
     (PRESTypePluginSerializeFunction) PRESTypePlugin_interpretedSerialize;
@@ -2673,7 +2632,7 @@ struct PRESTypePlugin *PixyCamConfigPlugin_new(void)
     (PRESTypePluginReturnBufferFunction)
     PixyCamConfigPlugin_return_buffer;
     plugin->getBufferWithParams = NULL;
-    plugin->returnBufferWithParams = NULL;  
+    plugin->returnBufferWithParams = NULL;
     plugin->getSerializedSampleSizeFnc =
     (PRESTypePluginGetSerializedSampleSizeFunction)
     PRESTypePlugin_interpretedGetSerializedSampleSize;
